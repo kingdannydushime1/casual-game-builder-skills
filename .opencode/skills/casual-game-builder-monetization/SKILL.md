@@ -1,6 +1,6 @@
 ---
 name: casual-game-builder-monetization
-description: Loaded by casual-game-builder at the monetization phase. Integrate the Playgama Bridge SDK v2 (the ONLY SDK) into a casual game: verified API facts (initialize, game_ready, pause/audio events, interstitials, rewarded), required SDK steps and the src/sdk.js wrapper template. The game must run WITH and WITHOUT the SDK.
+description: Loaded by casual-game-builder at the monetization phase. Integrate the Playgama Bridge SDK v2 (the ONLY SDK) into a casual game and make it pass Playgama moderation: verified API facts (initialize, game_ready, pause/audio events, interstitials, rewarded), the ad placement policy (REVIVE on game over, BONUS on victory, interstitials after 2 consecutive wins/losses), the src/sdk.js wrapper template, and the FULL official submission/moderation checklist (self-check, advertising rules, content rules, submission flow). The game must run WITH and WITHOUT the SDK.
 ---
 
 # Casual Game Builder - Monetization (Playgama Bridge SDK v2)
@@ -73,6 +73,10 @@ design decides the details, the rules below decide the ad flow:
   coin reward.
 - Revive is available **once per run** (after revive, the REVIVE button
   disappears for the rest of that run; the REPLAY button stays).
+- **COMPLIANCE (Playgama advertising rule 6.3):** offering "+1 life" every
+  time the player loses a life is FORBIDDEN. The once-per-run full-run
+  restore is compliant; a per-death "+1 life" loop is NOT. Never build a
+  "revive = +1 life, repeatable" mechanic.
 - If rewarded ads are not supported, hide the REVIVE button (never break
   replay).
 
@@ -168,6 +172,80 @@ Rules:
 - Every bridge call wrapped in try/catch.
 - Re-verify the method names against the docs of the exact version you ship
   (rule 7) before use.
+
+---
+
+## Playgama submission conditions - the FULL moderation checklist (MANDATORY)
+
+These are the official Playgama moderation conditions (verified from
+https://wiki.playgama.com - self-check, advertising-requirements,
+content-requirements, submitting-a-game, platform-specific-requirements).
+Every game MUST pass all of them BEFORE submission. The verification skill
+re-checks them at the DELIVERY GATE. NEVER guess or skip - re-read the live
+docs before shipping.
+
+### A. Technical / submission
+- [ ] ZIP archive, root contains `index.html`, total size <= 300 MB.
+- [ ] Playgama Bridge SDK integrated (this skill) - the ONLY required SDK.
+- [ ] `game_ready` event sent when the first playable frame is ready.
+- [ ] Progress saved through `bridge.storage` methods - NEVER `localStorage`
+      directly, NEVER external services. Progress must survive ad transitions
+      (state preserved after returning from an ad).
+- [ ] Game runs on desktop + mobile; WebGL ok (hardware acceleration only);
+      no Flash. No external network calls at runtime (no GA4/analytics, no
+      redirects, no outgoing links, no third-party ads).
+- [ ] Sound pauses when an ad plays or the screen is minimized (pause + audio
+      events, section "Required steps").
+- [ ] Game area: no important interface element cut off by the boundaries
+      (orientation letterboxing + rotation hint - engine skill).
+- [ ] No technical messages/errors, no crashes, no freezes, no console errors.
+- [ ] App name identical between game and submission metadata; all declared
+      languages actually translated (interface language = game language).
+
+### B. Advertising (official advertising-requirements)
+- [ ] Ads displayed ONLY through the Playgama Bridge - zero third-party ad
+      images/text/custom RTB banners.
+- [ ] Payments only through the Playgama Bridge.
+- [ ] Ads only at logical pauses (between levels, after game end, after
+      pause) - NEVER during active gameplay, NEVER under the player's finger/
+      cursor on an element they interact with.
+- [ ] All ad blocks match the game's orientation.
+- [ ] Rewarded ad = the player CHOOSES it via a clear button that states (1)
+      they will watch an ad and (2) what reward they get. The reward is a
+      BONUS on top of the game - never required to continue playing.
+- [ ] FORBIDDEN: rewarded ads for "+1 life" every time a life is lost (rule
+      6.3). The once-per-run REVIVE restore is compliant; a per-death loop is
+      not.
+- [ ] Full-screen ads (interstitial or rewarded): game sound AND gameplay
+      paused during the ad.
+- [ ] No interstitial right after a rewarded ad; no double ads back to back.
+- [ ] REPLAY button always present and reachable - an ad never blocks replay.
+
+### C. Content (official content-requirements)
+- [ ] NO realistic violence, abuse of children/animals, politics, religion,
+      life/death predictions.
+- [ ] Original assets/music, license-respected (CREDITS.md) - no brand names,
+      logos or copyrighted names/music (rename e.g. "Temple Run" -> "Temple
+      Fun").
+- [ ] NOT a copy of another game in the catalog, NOT a full or partial clone,
+      NOT a duplicate of the developer's own game. (Design skill anti-clone
+      gate applies.)
+- [ ] No AI-only low-quality asset build: the game uses real assets and adds
+      meaning to the player experience (assets + design skills).
+- [ ] No real-money transactions, no gambling, no lottery, no external
+      purchases, no external video transitions (no YouTube player).
+- [ ] Title in English, coherent with the game.
+
+### D. Submission flow (for the final delivery message)
+- Upload ZIP at developer.playgama.com ("Add Game"), fill metadata (title,
+  description highlighting uniqueness, how-to-play, supported devices,
+  distribution, link if already published).
+- Use the QA Tool to test before submitting.
+- Moderation takes ~1-5 business days on Playgama, up to 2 weeks on partner
+  platforms; partner platforms have EXTRA requirements (platform-specific
+  page) - list the game's partner-readiness in the delivery message (e.g.
+  portrait for Playdeck/GameDistribution, Russian for Playhop/VK, build size
+  <= 30 MB for TikTok/YouTube Playables, no black bars, etc.).
 
 ---
 
