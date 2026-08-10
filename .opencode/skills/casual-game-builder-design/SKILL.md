@@ -222,14 +222,24 @@ category: Y. Depth from Y: [which features]."
 - Rank the pool. Pick the strongest - the one that is BOTH original AND has the
   best hook potential. Never pick the safest.
 
-### 1.2 Kill-check the chosen idea (the anti-clone test)
+### 1.2 Kill-check the chosen idea (the anti-clone test - VERIFIED BY SEARCH)
 
-For the chosen idea, write honestly: "This is NOT like [existing game] because
-[reason]." Be brutal. If you cannot name a real difference in the CORE action
-- not the theme, the CORE ACTION - the idea fails. Go back to the pool and
-pick or generate another. Repeat until the core action is genuinely original.
-Also apply the ANTI-FANTASY test (real-world anchor + exactly ONE twist) and
-the BEAUTY test (a gorgeous look describable in one sentence, requirement 11).
+The kill-check is NOT a memory exercise. The agent MUST run a web search
+(websearch tool) before validating originality: search for the mechanic and
+for every obvious variation of it, in the genre and in hyper-casual terms
+(e.g. `"game where you [verb] [objects]"`, `[genre] game [mechanic]`,
+`best [category] games mechanic list`). Open the relevant results and compare
+the idea's CORE ACTION honestly against what exists. Then write: "This is NOT
+like [existing game(s)] because [reason]." Be brutal - the search exists
+precisely because the agent's memory of existing games is incomplete.
+
+If the search finds a game whose core action matches, the idea fails - go back
+to the pool and pick or generate another. If the search finds nothing close,
+record in GAMEDESIGN.md what was searched and what was compared (the search
+evidence proves originality to the verification phase). Repeat until the core
+action is genuinely original by SEARCH, not by memory. Also apply the
+ANTI-FANTASY test (real-world anchor + exactly ONE twist) and the BEAUTY test
+(hard criteria, section 2, requirement 11).
 
 ### 1.3 The hook-line test (would a stranger want to play it?)
 
@@ -263,11 +273,22 @@ Then write the exact details:
 - **ART DIRECTION (DA)**: deduced from the gameplay and theme, and stated as
   ONE precise sentence with a NAMED style reference and a concrete palette
   (e.g. "rounded cartoon in the style of Fruit Ninja, warm 4-color palette,
-  cute smiling characters"). The BEAUTY TEST: if the DA sentence is vague or
-  you cannot picture it, the look is not defined - rewrite it until a gorgeous,
-  coherent look is unmissable (requirement 11). A calm puzzle -> soft pastel
-  cartoon. An action game -> bold saturated colors. A warm service game -> cozy
-  warm tones. Never random, never generic.
+  cute smiling characters"). The BEAUTY TEST uses HARD criteria - do not judge
+  with a vague feeling, verify each line literally:
+  1. Palette: max 4 dominant colors + white/black, written as exact color names
+     or hex codes. If the palette has more than 4 dominant colors or cannot be
+     stated precisely, it fails.
+  2. Silhouette: every main element (player, enemies, buttons) must be
+     readable as a clean SILHOUETTE - describe what it looks like from its
+     outline alone. If you cannot describe the silhouette, it is visually
+     muddy - fail.
+  3. Style reference: a NAMED existing style the DA is anchored to (a real
+     game/cartoon, not "nice style"). If no real reference can be named, the
+     style is undefined - fail.
+  4. Warmth: the world must be warm and inviting (cute characters, smiles,
+     soft shapes) unless the mechanic strictly demands otherwise.
+  A calm puzzle -> soft pastel cartoon. An action game -> bold saturated
+  colors. A warm service game -> cozy warm tones. Never random, never generic.
 - **ORIENTATION**: portrait or landscape, with the reason tied to the
   mechanic (one-handed thumb play -> portrait; wide aiming/horizon -> landscape).
 - **SESSION LENGTH**: tuned to the genre - short enough that "one more round"
@@ -431,23 +452,33 @@ reaches the target. A single draft is NEVER accepted.
 ### 7.2 Iteration loop (mandatory, never skipped)
 
 1. **Write the full first draft** of GAMEDESIGN.md (sections 1-6).
-2. **Score it**: apply the grid, get a total (max 90). Write the score into
-   the document.
+2. **Score it as the AUTHOR, then re-score it as the ENEMY** (anti self-bias):
+   a self-score is systematically inflated, so NEVER keep it as final. After
+   the author score, switch mindset and re-score the SAME document as a
+   hostile publisher who rejects clones, ugly games and shallow games - give
+   the ENEMY score, lower of the two. Write both into the document.
 3. **HOSTILE REVIEW**: read the draft as a hostile designer. Attack every
-   dimension: is the core action REALLY original? Is the look REALLY beautiful?
-   Is any objective below target? Any vague line ("fun", "nice", "more",
+   dimension: is the core action REALLY original (re-check against the search
+   evidence)? Is the look REALLY beautiful (re-run the 4 hard criteria)? Is
+   any objective below target? Any vague line ("fun", "nice", "more",
    "eventually")? Would this survive 2 hours of play? A fresh developer with
    zero questions? Mark every weakness.
 4. **REWRITE, do not patch**: fix every marked weakness by rewriting the
    affected sections - not by adding a line of justification. Vague difficulty
    -> exact numbers. Missing power-up -> fully designed. Weak meta -> real shop.
    Ugly or generic theme -> re-anchor in the real world with a stronger twist.
-5. **RE-SCORE** and record. Target: **total >= 78/90 with NO single dimension
-   below 7** (Beauty & appeal included - a design that is not beautiful fails).
-   Below target = rewrite again and repeat. Record every score in the document
-   so the improvement is visible.
-6. **CONVERGENCE**: a full loop finds NOTHING below 7 and total >= 78 ->
-   the design passes (Gate A) and coding can start.
+5. **RE-SCORE** (author + enemy, keep the lower) and record. Target:
+   **ENEMY total >= 78/90 with NO single dimension below 7** (Beauty & appeal
+   included - a design that is not beautiful fails). The AUTHOR score never
+   counts - only the enemy score validates. Below target = rewrite again and
+   repeat. Record every score in the document so the improvement is visible.
+6. **SECOND PAIR OF EYES**: before passing, launch a subagent (Task tool) to
+   read the GAMEDESIGN.md as an independent senior game designer and score the
+   same 9 dimensions cold, without seeing your scores. Its score is the FINAL
+   one used for Gate A. If the subagent finds a flaw, fix it and re-send until
+   the independent score passes.
+7. **CONVERGENCE**: enemy score and independent score both >= 78, nothing
+   below 7 -> the design passes (Gate A) and coding can start.
 
 Every iteration must leave the design strictly better. If two consecutive
 iterations do not raise the score, change the approach (new mechanic, new
@@ -499,13 +530,14 @@ information" requirement - a short document fails):
 ## Gate A - Game design done (GAMEDESIGN.md complete)
 
 - [ ] Idea generated by the agent (no user input), with the anti-clone
-      kill-check passed: core action is genuinely original
+      kill-check passed: core action is genuinely original - VERIFIED by web
+      search, search evidence recorded in GAMEDESIGN.md
 - [ ] Category chosen (primary + optional secondary hybrid) and its constraints
       applied (section 1.0)
 - [ ] Real-world anchor + ONE twist; not fantasy-cliche; hook line + selling
       screenshot described
-- [ ] Beauty test passed: DA in ONE precise sentence (named style + concrete
-      palette), a gorgeous coherent look, nothing ugly or generic
+- [ ] Beauty test passed with the 4 HARD criteria (max 4-color palette,
+      readable silhouettes, named style reference, warmth)
 - [ ] Proven hit psychology applied and located (section 3)
 - [ ] Hybrid casual: casual core + real meta depth + monetization-ready
 - [ ] DEPTH PACKAGE: 5-8 features designed with exact rules
@@ -513,8 +545,9 @@ information" requirement - a short document fails):
       (sprites, sounds, music, FX, UI) for EVERY scene
 - [ ] Simulations (first-contact, full-run, retention, failure, monetization)
       run and recorded - all pass with no boring/unfair/empty findings
-- [ ] Hit-potential score history recorded; final score >= 78/90 with NO
-      dimension below 7 (Beauty & appeal included)
+- [ ] Hit-potential score history recorded; ENEMY + INDEPENDENT subagent scores
+      both >= 78/90 with NO dimension below 7 (Beauty & appeal included);
+      author self-score never used
 - [ ] Complete rules, state machine, scoring, difficulty curve - all numeric
 - [ ] ALL levels designed with stars, layout, difficulty params
 - [ ] Asset list complete and sized with DENSITY rules
@@ -524,3 +557,66 @@ information" requirement - a short document fails):
 
 One unchecked box means the design is NOT done - rewrite, do not skip. Re-run
 the gate whenever anything in the design changes.
+
+---
+
+## 9. WORKED EXAMPLE - the level of precision expected (reference only)
+
+This is a CONDENSED illustration of the precision expected - it is NOT the
+length target (the real document is far longer). Use it to calibrate the level
+of detail and exactness, never to copy the idea. Every section of your own
+GAMEDESIGN.md must be at least this precise:
+
+> **CORE LOOP (one sentence):** "Drag the right pastry to the right crate as
+> the conveyor speeds up - every correct drop pops points and fills the combo
+> meter, wrong drops crack the crate."
+>
+> **CATEGORY:** Primary = Time Management & Service (real job: bakery
+> dispatch). Secondary = Puzzle & Logic (sorting) for depth.
+>
+> **HOOK LINE:** "You run the town's magic bakery - but every cake is alive
+> and wants to go home to the right customer."
+>
+> **DA (hard criteria):** Rounded cartoon anchored to "Overcooked 2" style.
+> Palette (4): honey #F2C14E, cherry #E63946, cream #FFF3E0, cocoa #5D4037.
+> Silhouettes: chubby cake bodies, distinct per-type hats.
+>
+> **ORIENTATION:** Portrait - one thumb taps the target crate.
+>
+> **SESSION:** 60-75s per run; "one more order" hook.
+>
+> **WIN/LOSE:** Fill all pending orders before the closing bell; lose 3
+> crates = game over.
+>
+> **SCORING (exact):** correct drop +10 (x2, x3 combo), perfect (5 chain)
+> +50 + confetti, near-miss catch +5, wrong crate -1 crate (never instant
+> death).
+>
+> **DIFFICULTY (numeric):** conveyor speed 40px/s at 0s -> 110px/s at 60s,
+> +5%/5s; new pastry type at 15s, 30s, 45s; 2 types at once max until 45s.
+>
+> **DEPTH (5 features with rules):** 1) Combo x2/x3 with 4s decay. 2) Power-up
+> "Slow-Mo Glaze" (3s slow, drops every ~25s). 3) Coins +meta shop (unlock
+> new crates/skins). 4) Star rating per level (3 stars = no crate lost).
+> 5) Milestone popup at 500 / 1500 / 3000 pts with fanfare.
+>
+> **SCENE - GAMEPLAY (layout/behaviors/edges):** conveyor enters top-left,
+> exits bottom-right, crates x4 along bottom, score top-left, combo meter
+> under it. Tap crate = drop pastry, correct = green flash + popup, wrong =
+> red flash + shake. Edge: tap during combo window keeps chain; double tap =
+> one drop only; tap while a popup covers = ignored.
+>
+> **ASSETS - GAMEPLAY SCENE (table):** conveyor_bg.png (sprite, 1280x720,
+> PNG alpha), pastry_cake_cherry.png / _choco / _cream (sprite x3, 128x128,
+> idle+wobble anim x2), crate_red.png / _blue / _green / _yellow (sprite,
+> 180x180, 3 states), score_digits_0-9.png (font sprite), sound_drop_ok.wav,
+> sound_drop_wrong.wav, music_gameplay_loop.ogg, fx_confetti.png (particle),
+> button_pause.png (3 states)...
+>
+> **SIMULATION (first-contact):** 0-2s: title in, tap anywhere = "Start".
+> 3-5s: first pastry + first crate highlighted = first correct drop <10s = OK.
+> **SIMULATION (full run):** 0-15s tutorial-free warmup, 15-30s first new
+> type, 30-45s combo chase, 45-60s two types + speed, 60-75s closing-bell
+> sprint = ends at peak tension. OK.
+>
+> **SCORES:** author 74/90, ENEMY 80/90, INDEPENDENT subagent 79/90 - pass.
