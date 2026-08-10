@@ -56,6 +56,64 @@ API.
 
 ---
 
+## Ad placement policy (MANDATORY - where each ad type goes)
+
+These are the exact placement rules. Follow them in every game - the gameplay
+design decides the details, the rules below decide the ad flow:
+
+### 1. Game over -> REVIVE (rewarded ad, "continue where you left off")
+
+- The game over screen shows a **REVIVE / CONTINUE button** (always visible,
+  placed next to the REPLAY button, styled as an asset button like every
+  button).
+- Clicking it opens a **rewarded video** (`showRewardedAd()`). If the player
+  watches it to the `rewarded` state, the run resumes EXACTLY where it ended:
+  same score, same progression, same level state - only the run is restored.
+- This is the player's "save the run" moment - it is a survival hook, NOT a
+  coin reward.
+- Revive is available **once per run** (after revive, the REVIVE button
+  disappears for the rest of that run; the REPLAY button stays).
+- If rewarded ads are not supported, hide the REVIVE button (never break
+  replay).
+
+### 2. Victory -> BONUS (rewarded ad, "double your reward")
+
+- The victory screen shows a **BONUS / DOUBLE REWARD button** (asset button,
+  next to the "Continue" button).
+- Clicking it opens a **rewarded video**. If watched to the `rewarded` state,
+  the victory reward (coins / stars bonus / multiplier) is **doubled**.
+- This is the "profit from success" moment - a happy, skippable extra.
+- If the reward is not granted (closed/failed), the base reward is kept - never
+  removed.
+- If rewarded ads are not supported, hide the BONUS button.
+
+### 3. Interstitial cadence -> after 2 consecutive wins OR 2 consecutive losses
+
+- Interstitials appear **only after 2 consecutive finished runs of the same
+  outcome**: 2 wins in a row, or 2 losses in a row.
+- After a win streak or loss streak reaches 2, show the interstitial at the
+  next natural pause (game over screen or victory screen transition) - never
+  mid-gameplay.
+- Every finished run (win or loss) increments a streak counter; a run of the
+  opposite outcome resets it. Example: win, win -> interstitial. loss -> reset.
+  win -> counter 1. win -> counter 2 -> interstitial.
+- This cadence caps the ad frequency (max ~1 interstitial per 2 runs) while
+  keeping revenue steady - it rewards streaks with a break, not with a punishment.
+- When `isInterstitialSupported` is false, skip interstitials entirely - never
+  fake them.
+
+### 4. Frequency cap (never abuse the player)
+
+- Max 1 interstitial for every 2 finished runs (the streak rule enforces it).
+- Max 1 rewarded ad per finished run (revive OR bonus, not both) - a player
+  who already revived on game over does not get a bonus video on victory in
+  the same run.
+- Never show an interstitial right after a rewarded ad (the player just
+  watched a video - no double ads back to back).
+- The REPLAY button is always immediately reachable: no ad ever blocks replay.
+
+---
+
 ## The src/sdk.js wrapper (single module - the code never touches SDK directly)
 
 ```js
@@ -122,8 +180,16 @@ Rules:
 - [ ] Pause + audio events subscribed ONCE; game pauses/mutes in one handler;
       `bridge.platform.isAudioEnabled` applied at start
 - [ ] Progress persisted via `bridge.storage`, never `localStorage` directly
-- [ ] Interstitials at natural pauses when `isInterstitialSupported` (level
-      transition, game over) - never during active gameplay
+- [ ] Interstitials only after 2 consecutive wins OR 2 consecutive losses
+      (streak counter; opposite outcome resets) - at natural pauses, never
+      mid-gameplay, never right after a rewarded ad
+- [ ] Game over REVIVE button (rewarded): resumes the run EXACTLY where it
+      ended, once per run, hidden when rewarded unsupported, REPLAY always
+      reachable
+- [ ] Victory BONUS button (rewarded): doubles the victory reward ONLY when
+      state is `rewarded`; base reward kept on close/fail; hidden when
+      unsupported
+- [ ] Max 1 rewarded ad per finished run (revive OR bonus, not both)
 - [ ] Rewarded: BONUS button hidden when unsupported; reward granted ONLY on
       state `rewarded` (never on `closed`)
 - [ ] REPLAY always present and visible
