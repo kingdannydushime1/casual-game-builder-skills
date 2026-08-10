@@ -1,6 +1,6 @@
 ---
 name: casual-game-builder-assets
-description: Loaded by casual-game-builder at the asset phase. Hunt, verify and record ALL real assets for a casual game: primary sources + keyword search, coherent packs, sprite sheets, self-hosted fonts, audio verification with ffprobe, performance budget, exhaustive asset lists, the ASSETS.md sha256 manifest, DENSITY rules and the asset research iteration. Pass Gate C.
+description: Loaded by casual-game-builder at the asset phase. Hunt, verify and record ALL real assets for a casual game: primary sources + keyword search, coherent packs, sprite sheets, self-hosted fonts, audio verification with ffprobe, performance budget, exhaustive asset lists, the ASSETS.md sha256 manifest, DENSITY rules, the automated code<->assets cross-check (zero missing files, zero hallucinated paths) and the asset research iteration. Pass Gate C.
 ---
 
 # Casual Game Builder - Assets
@@ -280,6 +280,39 @@ restart - the repo IS the memory:
 4. **CREDITS.md** stays the human-facing source+license record; ASSETS.md is
    its machine-verifiable twin. Update both as you go.
 
+### The CODE <-> ASSETS cross-check - zero missing assets, zero hallucinated paths (MANDATORY)
+
+The two biggest asset bugs are: code referencing a file that does not exist
+(hallucinated path = broken game), and a file on disk that no code uses
+(dead weight = slower load). Kill both with a mechanical cross-check run
+whenever the code OR the assets change:
+
+```bash
+# 1. Every path referenced in src/*.js exists on disk (zero MISSING):
+rg -o '"assets/[^"]+"' src/ | tr -d '"' | sort -u | while read f; do
+  test -f "$f" || echo "MISSING: $f"; done
+
+# 2. Every approved asset in ASSETS.md is still on disk with the SAME bytes:
+sha256sum -c <(grep -oP '^\S+ \*?\K\S+' ASSETS.md | while read f; do
+  sha256sum "$f"; done) 2>/dev/null || echo "ASSETS.md <-> disk mismatch"
+
+# 3. Every file in assets/ is actually USED (optional cleanup, keeps load fast):
+for f in $(find assets -type f); do
+  rg -q "assets/${f#assets/}" src/ || echo "UNUSED: $f"; done
+```
+
+Rules:
+1. Output must contain ZERO "MISSING" lines before any screen is built and
+   before delivery. A missing file is a hard blocker - fix the path or
+   download the asset, never ship with a missing file.
+2. A path only "exists" if it is both on disk AND in ASSETS.md with a sha256
+   that matches. An asset that was never approved does not exist for the game.
+3. Review the "UNUSED" lines once per screen: they usually mean an asset was
+   replaced - delete the leftover (keeps the build light). Do not delete an
+   asset that a screen still needs.
+4. This cross-check is the ASSET twin of the CODE AUDIT SCRIPT (engine skill,
+   section 4) - run both together before every gate.
+
 ### The categories (fill ALL)
 
 **A. Backgrounds**
@@ -412,6 +445,10 @@ assets is what makes the game look like months of work by experts.
 - [ ] ASSETS.md manifest complete: sha256, source, license, approval status
       for every file; `sha256sum -c` passes
 - [ ] Real assets only: nothing generated, nothing hallucinated
+- [ ] CODE <-> ASSETS cross-check (section 7) run and clean: zero MISSING
+      paths, ASSETS.md sha256 matches disk, unused files reviewed
+- [ ] Zero asset referenced in code that does not exist on disk (both
+      directions verified mechanically, not by eye)
 - [ ] DENSITY: as many real assets as the gameplay demands; 3+ parallax
       planes; 2+ ambient decor per screen; 3+ enemy/obstacle types; 2+
       power-ups; per-action FX. Sparse = FAIL - go back and hunt more.

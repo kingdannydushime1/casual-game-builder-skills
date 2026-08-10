@@ -1,6 +1,6 @@
 ---
 name: casual-game-builder-engine
-description: Loaded by casual-game-builder at the engine, screens and code phases. Choose and boot the engine (never vanilla), build the 6 screens one at a time with POLISH TO THE PRO BAR + LAYOUT GUARDS (no overlapping UI), the responsive test matrix, code quality rules, battle-tested code templates (config, state, input, storage, main, pooling, scene lifecycle) and the PROGRAMMING ITERATION. Pass Gates B, D and E.
+description: Loaded by casual-game-builder at the engine, screens and code phases. Choose and boot the engine (never vanilla), build the 6 screens one at a time with POLISH TO THE PRO BAR + LAYOUT GUARDS (no overlapping UI), the responsive test matrix, code quality rules, battle-tested code templates (config, state, input, storage, main, pooling, scene lifecycle), the ZERO-HALLUCINATION code guard (every API verified, every asset path verified, automated audit scripts), automated pre-delivery tests (Playwright smoke suite + performance/leak gates) and the PROGRAMMING ITERATION. Pass Gates B, D and E.
 ---
 
 # Casual Game Builder - Engine, Screens & Code
@@ -471,6 +471,112 @@ its value changes. Physics tuning starting values: gravity 1400-1800, jump
 force 500-650, move speed 200-300 (jump height = `v^2 / (2g)` - verify it
 clears the intended obstacle).
 
+### Zero-hallucination code guard (MANDATORY - the game must have NO invented code)
+
+Hallucinated code = code whose API, asset path or mechanic was written from
+memory instead of verified. It is the #1 source of broken games. Golden rule 7
+applies at the CODE level too, with these hard rules:
+
+1. **Every engine API call is verified BEFORE it is written.** Before using
+   any method/event/property, look it up in the official docs/examples of the
+   EXACT pinned version. If you cannot verify it, you do not use it. Never
+   write `this.physics.add.something()` or `this.scene.something()` from
+   memory - confirm it exists first.
+2. **Every asset path is verified against the real disk BEFORE the code is
+   written.** The path in code must be `ls`-confirmed to exist (golden rule 8).
+   A typo in a filename = a broken game. When the code is written, run the
+   AUDIT SCRIPT (below) which re-checks every referenced path mechanically.
+3. **Never write "experimental" or "placeholder" code.** Every line written is
+   intended to ship. If you are unsure how to implement something, STOP and
+   research it (web search + docs) before writing - never guess and "see if it
+   works".
+4. **Every game mechanic must have a verifiable source**: either a tested
+   template of this skill, the engine's official example, or a documented
+   verified API. Code with no source = suspect code. Mark the source next to
+   any non-obvious logic.
+
+### The CODE AUDIT SCRIPT - mechanical, run before every gate (MANDATORY)
+
+Auditing code by eye misses things. Run these mechanical checks every time the
+code changes - they are fast and catch the silent killers:
+
+```bash
+# 1. Every asset path referenced in src/*.js exists on disk (zero missing):
+#    extract all "assets/..." strings, strip quotes, verify with ls. Any
+#    missing file = broken game, fix before continuing.
+rg -o '"assets/[^"]+"' src/ | tr -d '"' | sort -u | while read f; do
+  test -f "$f" || echo "MISSING: $f"; done
+
+# 2. No console.log left in production (only console.error/warn allowed):
+rg -n "console\.log\(" src/ && echo "FOUND console.log - REMOVE" || echo "clean"
+
+# 3. No magic numbers: every numeric literal that is a design value (speed,
+#    size, duration, multiplier) must live in config.js, not in screen code.
+#    Manual review of any literal > 3 that is not a coordinate/offset.
+rg -n "[0-9]{3,}" src/screen-*.js   # review each hit
+
+# 4. Every promise has a .catch / is awaited inside try (unhandled
+#    rejections crash nothing but log errors the QA tool flags):
+rg -n "\.then\(|await " src/sdk.js
+
+# 5. No engine API call is unverified: grep every `this.` method used and
+#    confirm each against the pinned version's docs. When in doubt, search:
+#    websearch "<engine> <version> <method> example"
+rg -o "this\.[a-zA-Z]+\.[a-zA-Z]+" src/ | sort -u   # review each against docs
+```
+
+Run these five checks after EVERY feature, before Gate D/E and before the
+DELIVERY GATE. Output must be clean (only the `rg -n` review lines you
+explicitly reviewed and accepted).
+
+### Automated pre-delivery tests - the game is NOT deliverable without them (MANDATORY)
+
+Manual testing is not enough to guarantee "no errors before delivery". Before
+the DELIVERY GATE, run an automated suite that drives the REAL game in a REAL
+browser and checks everything mechanically. Use Playwright (or Puppeteer if
+Playwright is unavailable) with the dev server running:
+
+```bash
+npx playwright install chromium          # once
+```
+
+Write a test script `tests/verify.mjs` that, for EVERY resolution of the test
+matrix (portrait + landscape + desktop, section 5):
+
+1. Launches the page at that viewport size.
+2. Waits for the canvas to be present and the game to boot.
+3. Captures a screenshot of EVERY screen (loading, menu, gameplay, pause,
+   victory, game over) - drive the game there by simulating taps/clicks
+   (Playwright `page.mouse`/`page.touchscreen`) and by clicking the correct
+   buttons.
+4. Collects ALL console messages; asserts ZERO errors and ZERO warnings.
+5. Asserts no page crash / no WebGL context loss.
+6. Asserts the canvas fills the viewport correctly (no distortion, no
+   overflow, no scrollbars).
+
+Then a PERFORMANCE + LEAK gate (weakest-device benchmark):
+
+```bash
+# Measure FPS, frame time and memory during 60s of gameplay at 1280x720:
+#   - use Playwright CDP session to read performance metrics
+#   - assert average FPS >= 55 on a simulated mid-tier device (throttle CPU 4x)
+#   - assert no frame-time spikes above 100ms after the first second
+#   - measure heap used before and after 60s of play + replay 10x: assert
+#     memory does NOT grow by more than 15% (leak check - a leak = reject)
+```
+
+And an ASSET-LOAD gate:
+
+```bash
+# Assert the FULL game (all assets) loads in under a target time on a throttled
+# 4G connection (Playwright emulateNetworkConditions), and that no asset fails
+# to load (collect browser console errors while loading every screen).
+```
+
+Every assertion must PASS before delivery. Any failure = fix the code, re-run
+the suite, do not deliver. Record the suite's output in the delivery message
+(the verification skill's DELIVERY GATE re-checks it).
+
 ### Browser/mobile gotchas (real bugs if ignored)
 
 - `index.html` MUST have the viewport meta and `touch-action` on the canvas:
@@ -575,6 +681,12 @@ the build. Process:
      mid-game, replay 10x in a row.
    - Check ZERO console errors/warnings, no leaks after 10+ minutes.
    - VISION-check every screen and every moment in motion.
+   - **AUTOMATED SUITE (mandatory)**: run the Playwright suite (section 4) at
+     every resolution of the test matrix: every screen loads, zero console
+     errors/warnings, screenshots captured, no crash. Run the performance/leak
+     gate (60s of play, memory stable, FPS >= 55 throttled) and the asset-load
+     gate (all assets load, under target time, none fail). Record the results.
+     A failing assertion blocks the campaign - fix and re-run, do not skip.
 5. **TICK THE COMPLETENESS CHECKLIST** (100% - the loop's exit condition):
    - [ ] EVERY feature of GAMEDESIGN.md is implemented and ticked (nothing
          "planned" or "later")
@@ -604,9 +716,13 @@ Re-read ALL the code line by line and test every screen flow:
 7. Replay flow: no accumulated state, score resets to zero.
 8. Resize + rotate the browser: nothing breaks, no misaligned UI.
 9. Check the console for ZERO errors and ZERO warnings.
-10. Verify every asset referenced in code exists in the right folder.
+10. Verify every asset referenced in code exists in the right folder (run the
+    AUDIT SCRIPT from section 4 - mechanically, not by eye).
 11. Confirm all text in the game is English.
 12. Confirm CREDITS.md lists every asset with its license.
+13. Run the AUTOMATED SUITE (Playwright + performance/leak gate + asset-load
+    gate, section 4) and keep its recorded output - it is part of the delivery
+    evidence.
 
 ---
 
@@ -654,6 +770,18 @@ Re-read ALL the code line by line and test every screen flow:
 - [ ] Memory hygiene: timers/tweens/listeners stopped on scene shutdown
 - [ ] Edge cases handled (debounce, auto-pause, resize, slow device)
 - [ ] Zero console.log in production; every promise has a .catch
+- [ ] CODE AUDIT SCRIPT (section 4) run and clean: every asset path exists on
+      disk, no console.log, no unverified engine API, no unhandled promises
+- [ ] Every engine API used is verified against the pinned version's official
+      docs (zero hallucinated code)
+- [ ] AUTOMATED SUITE (section 4) run: every resolution of the test matrix
+      passes (zero console errors, screenshots captured, no crash)
+- [ ] Performance/leak gate passed: 60s throttled play FPS >= 55, memory
+      stable, no leak over 10x replays
+- [ ] Asset-load gate passed: all assets load under target time on throttled
+      4G, none fail
+- [ ] GAMEDESIGN.md completeness checklist 100% ticked; every feature
+      implemented and tested
 
 One unchecked box in any gate means that phase is NOT done - fix it, do not
 skip. Re-run the gate whenever anything in that phase changes.
