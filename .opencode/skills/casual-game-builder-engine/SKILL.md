@@ -311,6 +311,61 @@ this polish. Rules:
      INSIDE its own reserved space, never under another element.
    - VISION-check this at every resolution of the test matrix - an overlap
      that fits at 960x540 can appear at 375x667.
+10. **EVERY BUTTON HAS A VISIBLE TEXT LABEL - never a bare icon.** A button the
+    player cannot read is a broken button (a common rejection reason: nobody
+    knows what to press). Each button must show its action in clear text -
+    "PLAY", "REPLAY", "PAUSE", "RESUME", "NEXT", "BONUS", "SHOP"...:
+    - If the button image is a framed plate with NO text baked in (common for
+      generic button packs), draw a TEXT OVERLAY on top in the game font, big,
+      centered, with a dark outline/shadow so it reads on any background.
+    - If the button image already contains its own label, do NOT add a second
+      overlapping text.
+    - VISION-verify every button: open the captured screen and read the label.
+      A button whose text is missing, tiny, clipped, uncentered or unreadable
+      fails the screen's Gate D. This applies to EVERY resolution of the test
+      matrix.
+
+---
+
+## 3b. Fonts - every downloaded font is USED, none wasted
+
+A downloaded font that no screen uses is dead weight (slower load) and a
+warning sign of sloppiness. Rules:
+
+1. **Download ONLY the fonts the game actually uses** (from the design): a
+   maximum of 2 - ONE display/title font + ONE body font. Do not import more
+   "because they look nice".
+2. **Every font in `assets/fonts/` MUST be referenced by code.** Before any
+   gate, run a mechanical check: for each font file, grep for its family name
+   in `src/`. A font with zero references is deleted (unless the design
+   explicitly schedules it).
+3. **Use the title font for titles and the body font for everything else** -
+   one place each, never a third random font.
+4. Self-host always (no CDN - publishers block external requests).
+
+## 3c. Asset placement & proportions - assets are POSITIONED, never dropped
+
+Misplaced assets and wrong proportions are a top rejection reason. An asset
+does not "go somewhere" - it is placed deliberately, sized deliberately, from
+the VISION of the actual image:
+
+1. **Place every asset FROM its image** (golden rule 10): open the asset,
+   look at its visual center, its padding, its transparent margins, then decide
+   its exact x/y, scale and z-order from what you SEE - never from guesswork.
+   Write the placement into the screen code as explicit constants.
+2. **Proportions must be exact**: the on-screen size of each sprite/button is
+   derived from the design (e.g. a coin = 1/12 of screen height, a button
+   wide enough for its label) and verified by VISION on the captured screen.
+   A sprite scaled more than 2x its source resolution is a blur risk - re-cut
+   or re-hunt instead of stretching.
+3. **VISION placement check (mandatory, per screen)**: after building, capture
+   the screen and LOOK at each element: is it where the design says? Is its
+   size proportional to the screen (not huge, not microscopic)? Is it centered/
+   aligned correctly? Does it overlap nothing? Fix what the eyes reveal -
+   never ship a screen whose placements were never looked at.
+4. **The DESIGN places, the CODE implements**: every position, size and z-order
+   comes from the design document / the VISION of the asset - the code never
+   "decides by itself" where something goes.
 
 ---
 
@@ -754,6 +809,12 @@ Re-read ALL the code line by line and test every screen flow:
       no label under a button, no popup colliding with HUD (checked at base
       resolution AND in the responsive test matrix screenshots)
 - [ ] Every button shows its English label + visible hover/pressed states
+      (VISION: the label text is readable at every resolution - no bare icons)
+- [ ] PLACEMENT/PROPORTIONS: every asset of this screen placed from its image
+      (position, size, z-order from VISION) and VISION-verified on the
+      captured screen - nothing misplaced, no wrong scale, no blurry stretch
+- [ ] FONTS: every font used on this screen is referenced in code; unused
+      fonts deleted (section 3b)
 - [ ] Flow to the next screen works
 - [ ] No regression on the previously built screens
 - [ ] POLISH: dedicated polish pass done on this screen (depth, shadows,

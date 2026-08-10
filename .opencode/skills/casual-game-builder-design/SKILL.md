@@ -60,19 +60,23 @@ skill and every design must satisfy all of them:
    constraints (verbs, loops, depth, pitfalls) and designs WITHIN them (section
    1). Never invent in the void - choose a category, apply its rules, then
    create.
-10. **REAL-WORLD ANCHOR + ONE TWIST (anti-fantasy).** The idea must start from
-    a relatable real-world context (kitchen, delivery, barber, cafe, garden,
-    workshop, post office, bakery - or a real everyday situation) that everyone
-    understands in 2 seconds and that is warm and visually rich. Originality
-    comes from ONE single mechanical twist on top of that real context
-    ("you deliver parcels... but the parcels are alive and escape"). One twist
-    = original. Several twists = fantasy mess. If the idea has no real-world
-    anchor or needs more than one twist to be interesting, it fails.
-11. **NOT FANTASY, NOT UGLY.** The theme must be grounded (no generic space/
-    dragon/wizard/fairy fantasy unless the mechanic genuinely requires it) and
-    must have a clearly describable BEAUTIFUL art direction (a named style + a
-    concrete palette). If you cannot describe a gorgeous look in one sentence,
-    the idea is ugly - redo it.
+10. **CARTOON WORLD ONLY - NO REAL LIFE, NO PHOTOS (critical).** The game
+    world MUST be an illustrated CARTOON world - bright, drawn, rounded,
+    coherent - expressible ENTIRELY with pre-made cartoon asset packs (characters,
+    items, backgrounds that free packs actually contain). Realism is the enemy:
+    photorealistic content (real-life photos, photo backgrounds, realistic
+    people, close-up photography, realistic textures) is FORBIDDEN. Never
+    choose a concept whose visuals require photo-realistic assets - a theme
+    that can only be shown with photos (real people, real places, realistic
+    food close-ups) fails immediately. The concept is a FUN CARTOON world with
+    ONE mechanical twist ("a cartoon bakery where the cakes have faces and
+    try to escape"). If you cannot picture the game as a bright cartoon with
+    cartoon assets, the concept is wrong - redo it.
+11. **NOT UGLY, NOT GENERIC.** The theme must have a clearly describable
+    BEAUTIFUL art direction (a named cartoon style + a concrete palette) and
+    must be expressible with the cartoon asset packs that exist. If you cannot
+    describe a gorgeous cartoon look in one sentence, the idea is ugly - redo
+    it.
 
 ---
 
@@ -116,19 +120,22 @@ primary. For the chosen category(ies), read and APPLY the constraints:
   clones, one-tap-instant-death clones - if the mechanic can be described as
   "it's like [runner/flappy]", fail it.
 
-**CATEGORY 3 - Time Management & Service (the "real job" category)**
-- Description: run a real-world service (cafe, delivery, barber, kitchen,
-  post office, workshop) with queues and priorities.
-- Core satisfaction: "flow state" - everything served smoothly, no angry
+**CATEGORY 3 - Time Management & Service (the "cartoon service" category)**
+- Description: run a cute cartoon service (cartoon cafe, cartoon kitchen,
+  cartoon bakery, cartoon workshop) with queues and priorities.
+- Core satisfaction: "flow state" - everything served smoothly, no upset
   customer.
 - Verbs: serve, queue, deliver, prep, chop, pour, assemble, satisfy.
-- Constraints: the setting is a REAL everyday job + ONE twist; customers must
-  wait (patience meter) but never be blocked unfairly; upgrades = speed and
-  capacity; combo = chained perfect serves.
+- Constraints: the setting is a BRIGHT CARTOON service (never a realistic one,
+  never photos - requirement 10) + ONE twist; customers must wait (patience
+  meter) but never be blocked unfairly; upgrades = speed and capacity; combo =
+  chained perfect serves.
 - What makes a hit here: warm universal theme, visible progress (shop grows),
-  the "just one more customer" hook, extremely rich and cute asset potential.
+  the "just one more customer" hook, extremely rich and cute asset potential
+  (cartoon packs are full of these).
 - Overdone/pitfalls to AVOID: Diner-Dash / Papa's-clone layouts, generic
   restaurant sim clones - the twist must change HOW you play, not the decor.
+  NEVER a realistic kitchen or realistic food.
 
 **CATEGORY 4 - Physics & Skill**
 - Description: aiming, launching, bouncing, balancing, sliding - mastery of
@@ -211,14 +218,21 @@ category: Y. Depth from Y: [which features]."
 ### 1.1 Generate a broad idea pool WITHIN the category
 
 - Generate 5-8 DIFFERENT original game ideas (one line each). Each must obey
-  the chosen category's constraints AND the real-world + one twist rule (10).
-  For each idea: a different mechanic (never a variation of the same) and a
-  different real-world setting.
+  the chosen category's constraints AND the CARTOON WORLD rule (10): the game
+  is a bright illustrated cartoon expressible with cartoon asset packs - never
+  a real-life or photorealistic theme. For each idea: a different mechanic
+  (never a variation of the same) and a different cartoon world/setting.
 - Combine TWO verbs from the category to force innovation (e.g. serve + balance,
   launch + pair, sort + time). Innovation comes from the VERB MASHUP and the
   ONE twist - never from a weird theme.
 - For each idea, answer in one line: the SINGLE main action, WHY it is
   different from existing games, and the ONE twist.
+- **The CARTOON TEST (mandatory, per idea)**: "Can this idea be drawn as a
+  bright cartoon using only cartoon asset packs (rounded characters, items,
+  backgrounds)? Does it need ANY photo or realistic asset?" If it needs a
+  photo or cannot be expressed as cartoon assets, the idea FAILS - discard it.
+  A cartoon bakery, cartoon kitchen, cartoon forest, cartoon factory = yes.
+  A realistic kitchen, a photo of real food, a real person = no.
 - Rank the pool. Pick the strongest - the one that is BOTH original AND has the
   best hook potential. Never pick the safest.
 
@@ -238,20 +252,20 @@ to the pool and pick or generate another. If the search finds nothing close,
 record in GAMEDESIGN.md what was searched and what was compared (the search
 evidence proves originality to the verification phase). Repeat until the core
 action is genuinely original by SEARCH, not by memory. Also apply the
-ANTI-FANTASY test (real-world anchor + exactly ONE twist) and the BEAUTY test
-(hard criteria, section 2, requirement 11).
+CARTOON WORLD test (bright cartoon, no photos, requirement 10) and the BEAUTY
+test (hard criteria, section 2, requirement 11).
 
 ### 1.3 The hook-line test (would a stranger want to play it?)
 
-Write the concept as ONE catchy line ("You run a cat barbershop where every
-cat wants a different crazy style - before the next cat arrives"). Then answer
-honestly: would someone reading this line feel like playing? If the line is
-flat, generic or unexciting, the IDEA is flat - go back to the pool. The hook
-line must be so inviting that a player clicks the thumbnail just to try it.
-Also describe the SINGLE MOST SELLING screenshot (the store thumbnail): what is
-on screen, what is the player doing, why is it beautiful and intriguing? If you
-cannot picture a beautiful, attractive thumbnail, the idea cannot look good on
-the platform - fail it.
+Write the concept as ONE catchy line in a cartoon world ("You run a cartoon
+bakery where every cake has a face and tries to escape before the oven timer
+rings"). Then answer honestly: would someone reading this line feel like
+playing? If the line is flat, generic or unexciting, the IDEA is flat - go
+back to the pool. The hook line must be so inviting that a player clicks the
+thumbnail just to try it. Also describe the SINGLE MOST SELLING screenshot
+(the store thumbnail): what is on screen, what is the player doing, why is it
+beautiful and intriguing? If you cannot picture a beautiful cartoon thumbnail
+built from cartoon assets, the idea cannot look good on the platform - fail it.
 
 ### 1.4 Design the core loop FIRST (before anything else)
 
@@ -268,8 +282,10 @@ Then write the exact details:
 
 ## 2. Set the frame (theme, art direction, orientation, session)
 
-- **THEME**: derived from the mechanic and its real-world anchor - whatever
-  makes the original mechanic feel alive and readable. Never random.
+- **THEME**: a CARTOON world derived from the mechanic - whatever makes the
+  original mechanic feel alive and readable in a bright illustrated style.
+  Never random, never photorealistic, never a real-life setting (requirement
+  10).
 - **ART DIRECTION (DA)**: deduced from the gameplay and theme, and stated as
   ONE precise sentence with a NAMED style reference and a concrete palette
   (e.g. "rounded cartoon in the style of Fruit Ninja, warm 4-color palette,
@@ -444,7 +460,7 @@ reaches the target. A single draft is NEVER accepted.
 | Reward cadence | Steady rewards, no dead moments, best moment at the end |
 | Retention depth | Meta loop, unlocks, one-more-round hook, non-punitive failures |
 | Hybrid-casual fit | Casual core + real meta depth + monetization-ready structure |
-| Beauty & appeal | Gorgeous, describable art direction; warm real-world anchor; one twist; a thumbnail you would click (10 = beautiful, intriguing, not fantasy-cliche, not ugly) |
+| Beauty & appeal | Gorgeous, describable CARTOON art direction; bright cartoon world, no photos/realism; one twist; a thumbnail you would click (10 = beautiful cartoon, intriguing, not ugly, not photorealistic) |
 | Difficulty curve | Numeric ramp, gentle start, peaks at level ends, no unfairness |
 | Completeness | Every scene ultra-detailed, every asset listed, no "planned" left |
 | Simulated playtest | All simulations passed with no boring/unfair/empty findings |
@@ -466,7 +482,8 @@ reaches the target. A single draft is NEVER accepted.
 4. **REWRITE, do not patch**: fix every marked weakness by rewriting the
    affected sections - not by adding a line of justification. Vague difficulty
    -> exact numbers. Missing power-up -> fully designed. Weak meta -> real shop.
-   Ugly or generic theme -> re-anchor in the real world with a stronger twist.
+   Ugly, generic or photorealistic theme -> redraw it as a bright cartoon
+   world with a stronger twist (requirement 10).
 5. **RE-SCORE** (author + enemy, keep the lower) and record. Target:
    **ENEMY total >= 78/90 with NO single dimension below 7** (Beauty & appeal
    included - a design that is not beautiful fails). The AUTHOR score never
@@ -496,7 +513,7 @@ information" requirement - a short document fails):
 - [ ] Main action, goal, win condition, lose condition - unambiguous
 - [ ] Category chosen (primary + optional secondary hybrid) with the chosen
       category's constraints applied (section 1.0)
-- [ ] Real-world anchor + ONE twist, anti-fantasy test passed
+- [ ] CARTOON world + ONE twist, no photos/realism (CARTOON TEST passed)
 - [ ] Hook line (one catchy sentence) + the most selling screenshot described
 - [ ] Theme + art direction + orientation (with reasons); DA in ONE precise
       sentence with a named style reference and a concrete palette (beauty test)
@@ -534,8 +551,8 @@ information" requirement - a short document fails):
       search, search evidence recorded in GAMEDESIGN.md
 - [ ] Category chosen (primary + optional secondary hybrid) and its constraints
       applied (section 1.0)
-- [ ] Real-world anchor + ONE twist; not fantasy-cliche; hook line + selling
-      screenshot described
+- [ ] CARTOON world + ONE twist; no photorealistic content; hook line + selling
+      cartoon thumbnail described
 - [ ] Beauty test passed with the 4 HARD criteria (max 4-color palette,
       readable silhouettes, named style reference, warmth)
 - [ ] Proven hit psychology applied and located (section 3)
@@ -571,11 +588,12 @@ GAMEDESIGN.md must be at least this precise:
 > the conveyor speeds up - every correct drop pops points and fills the combo
 > meter, wrong drops crack the crate."
 >
-> **CATEGORY:** Primary = Time Management & Service (real job: bakery
-> dispatch). Secondary = Puzzle & Logic (sorting) for depth.
+> **CATEGORY:** Primary = Time Management & Service (cartoon bakery dispatch).
+> Secondary = Puzzle & Logic (sorting) for depth.
 >
-> **HOOK LINE:** "You run the town's magic bakery - but every cake is alive
-> and wants to go home to the right customer."
+> **HOOK LINE:** "Run a bright cartoon bakery where every cake has a face and
+> wants to escape - sort each one into its right crate before the oven timer
+> rings."
 >
 > **DA (hard criteria):** Rounded cartoon anchored to "Overcooked 2" style.
 > Palette (4): honey #F2C14E, cherry #E63946, cream #FFF3E0, cocoa #5D4037.

@@ -52,18 +52,22 @@ Kenney". Rules:
 ### Keyword search - find ANY asset anywhere (use when the packs fall short)
 
 A web search is a FIRST-CLASS asset source, not a last resort. For themes,
-photos, moods or styles no pack covers (a realistic jungle photo for a
-background, a 1920s poster style, a specific cartoon animal), keyword search
-beats fixed sites. Method:
+moods or styles no pack covers (a specific cartoon animal, a cartoony
+factory, a funny monster), keyword search beats fixed sites. Method:
 
 1. Build the NEEDS list first (section 3 - same list, same discipline).
-2. Search with targeted keywords, several variants per need:
-   - `free <theme> <type> png transparent`, `CC0 <theme> background`,
-     `royalty free <theme> game background`, `<theme> <type> asset pack
-     download zip`, `open source <theme> sprites`.
-   - For photo backgrounds specifically: `free <theme> background photo
-     <orientation>` (e.g. `free tropical jungle background photo landscape`),
-     `royalty free <theme> landscape`.
+2. Search with targeted keywords, several variants per need - ALWAYS cartoon/
+   illustration terms, NEVER photo/realistic terms:
+   - `free <theme> <type> cartoon png transparent`, `CC0 <theme> cartoon
+     background`, `royalty free <theme> game asset pack cartoon download zip`,
+     `open source <theme> cartoon sprites`, `vector <theme> illustration
+     game asset`.
+   - For backgrounds specifically: `free <theme> cartoon background game
+     <orientation>` (e.g. `free cartoon bakery background game landscape`),
+     `royalty free <theme> cartoon landscape illustration`.
+   - FORBIDDEN keywords: `photo`, `photography`, `realistic`, `real life`.
+     A photo background is a rejection risk (design rule 10) - never search
+     for one.
 3. Filter results to sources with a DIRECT download link: read the page, find
    the file link, verify it downloads with `curl -L` before extracting
    (snippet below). Skip anything behind an account, a captcha, or a login
@@ -72,7 +76,8 @@ beats fixed sites. Method:
    needed); CC-BY is fine but MUST be credited in CREDITS.md. Unknown
    license = discard.
 5. Judge the found asset with VISION like any other - a keyword find still has
-   to match the style, palette and resolution of the game.
+   to match the style, palette and resolution of the game, and MUST be a drawn
+   cartoon asset, never a photo (discard any photorealistic file on sight).
 
 Download method (works for all of the above - primary sources AND keyword
 finds):
@@ -116,14 +121,24 @@ Follow this exact 4-step method - do not browse randomly:
 1. **Start with Kenney.nl** - its packs are designed to be coherent together.
    Pick ONE pack and stay in it. Do NOT mix two different Kenney packs unless
    they are from the same visual series.
-2. **Check the license of every single asset.** CC0 = free to use, no credit
+2. **NO PHOTOS - cartoon assets ONLY (critical, design rule 10).** The game is
+   a bright CARTOON world. Photo-realistic assets are FORBIDDEN: no
+   photographic backgrounds, no photos of real objects/people/places, no
+   realistic textures. Every asset must be a DRAWN/illustrated cartoon asset
+   matching the game's DA. When searching, ALWAYS add cartoon/illustration
+   terms (`cartoon`, `illustration`, `vector`, `flat`, `game asset`) and NEVER
+   use `photo`, `realistic`, `photography`. If a downloaded pack contains a
+   photorealistic file, discard it - it would break the cartoon coherence of
+   the whole game. Judge with VISION: is this clearly DRAWN, or does it look
+   like a photograph? Drawn = keep. Photograph = discard.
+3. **Check the license of every single asset.** CC0 = free to use, no credit
    needed. CC-BY = free to use but you MUST credit the author in CREDITS.md.
    If you are unsure, choose another asset.
-3. **Prefer PNG with transparency** for sprites and UI elements. JPG only for
+4. **Prefer PNG with transparency** for sprites and UI elements. JPG only for
    full backgrounds (it is smaller).
-4. **Check the resolution**: a 32x32 sprite stretched to 500x500 will look
+5. **Check the resolution**: a 32x32 sprite stretched to 500x500 will look
    blurry. Prefer assets close to the size you need, or 2x for retina.
-5. Track every asset + source + license in a CREDITS.md file in the game repo.
+6. Track every asset + source + license in a CREDITS.md file in the game repo.
 
 ---
 
@@ -157,6 +172,15 @@ this.load.spritesheet("player", "assets/sprites/player.png",
    font loader). The final build must contain ZERO remote URLs - publishers
    block external requests, a CDN font = broken typography.
 3. Google Fonts = OFL license, embedding is allowed. Note it in CREDITS.md.
+4. **Only download fonts the game actually uses**: max 2 - ONE display/title
+   font + ONE body font, decided in the design. Never bulk-download "nice"
+   families. A font file that no code references is dead weight - before each
+   gate, grep for each font family in `src/` and DELETE any font with zero
+   references (engine skill, section 3b).
+5. **Every button's label must be readable**: buttons get their action text
+   ("PLAY", "REPLAY", "BONUS"...) drawn in the game font over the button plate
+   (engine skill, section 3, rule 10). The font chosen must be legible at
+   small sizes (avoid ultra-thin styles for body and button text).
 
 ## 4. Audio verification WITHOUT ears (verify with tools, you cannot listen)
 
