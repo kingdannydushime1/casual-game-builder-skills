@@ -255,11 +255,11 @@ NOT done. Re-run a gate whenever anything it covers changes.
 
 ---
 
-### PHASE 1 — DESIGN (ITERATE until the concept is a hit)
+### PHASE 1 — DESIGN (direct and complete)
 
-> Emphasis: the concept must be ULTRA simple, easy to understand, FUN, and
-> hypercasual. Then you design the COMPLETE gameplay that lists EVERY asset
-> the game will need. This phase runs in ITERATIONS with scores.
+> Emphasis: simple concept, then write the COMPLETE gameplay with the full
+> asset list. No concept pools, no scoring, no design teams — you design it
+> once, directly.
 
 1. **The concept — from the user OR invented by you, always simple
    hypercasual.**
@@ -268,45 +268,15 @@ NOT done. Re-run a gate whenever anything it covers changes.
      verb done perfectly, understood in <3 seconds, a bright cartoon world —
      polish it, never fight it. A user concept that is too complex is
      SIMPLIFIED, not discarded.
-   - If NO concept was given: invent one yourself. Generate a pool of 5-8
-     DIFFERENT original hypercasual ideas (one line each). Each idea: ONE verb
-     (tap, swipe, drag, aim, balance, stack...), instantly understood, a
-     bright cartoon world (NEVER photos/realism). Combine two verbs to force
-     originality. No match-3 / runner / flappy / merge clones.
-2. **Score every idea (0-10 each)** on: FUN IN 3 SECONDS, SATISFYING
-   (every action visibly pays), ADDICTIVE (one-more-round), HYPERCASUAL
-   (one gesture, glance-readable). Record the table. For an invented pool,
-   pick the winner by score ALONE — never ask the user. For a user-given
-   concept, keep it (it is already chosen).
-3. **Anti-clone kill-check BY SEARCH** (websearch): search the mechanic and
-   its variations; if a game already does the core action, the idea fails.
-   Record the search + comparison as evidence.
-4. **Hook line** — one catchy cartoon sentence ("You run a cartoon bakery
+   - If NO concept was given: invent ONE simple hypercasual idea yourself.
+     One verb (tap, swipe, drag, aim, balance, stack...), instantly
+     understood, a bright cartoon world (NEVER photos/realism). No
+     match-3 / runner / flappy / merge clones.
+2. **Hook line** — one catchy cartoon sentence ("You run a cartoon bakery
    where every cake has a face and tries to escape before the oven timer").
    If the line is flat, the idea is flat. Also describe the single most
    selling thumbnail screenshot.
-5. **LAUNCH MULTIPLE DESIGN TEAMS (Task tool, in parallel) — each team
-   imagines its part of the game's composition. This is where everything
-   that makes the game COOL is imagined.** Launch 4+ independent subagents at
-   the same time, each with a domain and an art-direction brief (theme,
-   palette, cartoon style). Each team returns a detailed creative proposal
-   with EXACT visual details:
-   - **World & Environment team**: background + parallax layers, floor /
-     platforms, ambient decor, the look and mood of every screen.
-   - **Characters & Enemies team**: the player, and 3+ enemy/obstacle types
-     with their sprites, animations, behaviors and personalities.
-   - **Collectibles & Power-ups team**: coins, collectibles, 2+ power-ups —
-     their sprites and on-screen effects.
-   - **FX, Audio & Juice team**: particles, popups, screen effects (shake,
-     flash, confetti), ALL sounds and music, and the feedback attached to
-     every action.
-   - **Progression & Meta team**: level themes/variations, milestones,
-     shop items, unlocks.
-   Tell every team: cartoon-only, no photos, palette ≤4 dominant colors,
-   asset packs must be able to express it, FUN first. You MERGE all proposals
-   into the design — nothing is invented later in the code.
-6. **Assemble the COMPLETE gameplay design and write GAMEDESIGN.md** with
-   EXACT rules and numbers, from the teams' proposals:
+3. **Write GAMEDESIGN.md** with EXACT rules and numbers:
    - Core loop in one sentence; main action; win/lose conditions.
    - Theme + art direction in one precise sentence (named style + max 4-color
      palette). Portrait or landscape with a reason.
@@ -314,9 +284,9 @@ NOT done. Re-run a gate whenever anything it covers changes.
    - **ALL levels designed**: complete progression, numeric difficulty curve
      (+X% speed per level, +Y spawn density, new obstacle every N levels),
      star thresholds.
-   - DEPTH package (5-8 features with exact numbers): combo/multiplier,
-     2+ power-ups, escalating difficulty, coins + meta, milestones, best-score
-     chase, near-miss, juice on every action.
+   - DEPTH package with exact numbers: combo/multiplier, 2+ power-ups,
+     escalating difficulty, coins + meta, milestones, best-score chase,
+     near-miss, juice on every action.
    - Full scoring rules; full state machine; interaction spec (object ×
      action × result).
    - **THE COMPLETE ASSET LIST — the bridge to the asset phase.** Every asset
@@ -325,22 +295,13 @@ NOT done. Re-run a gate whenever anything it covers changes.
      sprite + ALL animations, 3+ enemy/obstacle types, 2+ collectibles,
      2+ power-ups, HUD icons, popups, particles/confetti, ALL sounds, music,
      fonts, favicon. If the list is thin, the game is thin — expand the design.
-   - Simulations (first-contact, full-run, retention, failure) — simulate
-     play sessions in your head and record the findings.
-7. **ITERATE with scores (mandatory).** Score the draft as the AUTHOR, then
-   re-score the same document as a HOSTILE ENEMY (rejecting clones, ugly
-   games, shallow games) — keep the LOWER score. Rewrite every weakness, do
-   not patch. Re-score. Then launch a SUBAGENT (Task tool) to score the 9
-   dimensions COLD as an independent senior game designer. Target: independent
-   score ≥ 78/90 with NO dimension below 7. Two consecutive iterations that
-   do not improve the score = change the approach, kill the weak idea, do not
-   polish it.
+4. **One quick reality check** — play a short imaginary session in your head:
+   first contact, a full run, a failure. Fix whatever feels weak in the
+   document, then move on. No scoring passes, no extra iterations.
 
 **Gate A** — concept fixed (user-given, simplified to hypercasual, OR invented
-alone), original (search-verified), ultra-simple hypercasual hook, cartoon-only,
-MULTIPLE design teams ran in parallel and their proposals merged into the
-design, full GAMEDESIGN.md written, ALL levels numeric, complete asset list
-covering every screen, simulations recorded, independent score passes. One
+alone), ultra-simple hypercasual hook, cartoon-only, full GAMEDESIGN.md
+written, ALL levels numeric, complete asset list covering every screen. One
 unchecked box = rewrite.
 
 ---
