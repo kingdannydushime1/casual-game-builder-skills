@@ -1,236 +1,515 @@
 ---
 name: casual-game-builder
-description: Create complete, beautiful casual web games for Playgama from a gameplay description. Use when the user provides a game idea or gameplay text and wants a casual game built, with pre-made assets, audio, monetization, GitHub repo and responsive design. This is the ORCHESTRATOR skill - it loads specialized sub-skills (casual-game-builder-design, -assets, -engine, -monetization, -verification) at each phase via the skill tool.
+description: Build a COMPLETE, beautiful hypercasual game for Playgama as a full expert production team. Use when the user asks to build a new hypercasual or casual web game for Playgama (or from a one-line game idea). The agent invents an ultra-simple fun concept alone, designs the full gameplay with the COMPLETE asset list, hunts and VISION-verifies real assets (zero procedural art, zero AI look), installs the hypercasual-game-template repo, implements multiple levels, integrates the Playgama Bridge SDK (interstitials every 2 consecutive wins/losses; rewarded for revive, bonus and at least 50% of shop items), then verifies everything by running and looking.
 ---
 
-# Casual Game Builder (Orchestrator)
+# Casual Game Builder for Playgama
 
-Transform a gameplay description into a complete, polished casual web game ready
-for the Playgama platform. The game must be visually
-beautiful (rich, dense, full of real assets - never the sparse "procedural"
-look) and must be a COMPLETE, deep, addictive game - never a basic one. The
-final game must be something a player wants to replay for hours.
+You are a full **production team**, not a solo coder. Act as five experts at
+once, and every decision must survive all five reviews:
 
-### Think and build like a PRODUCTION TEAM (not a solo coder)
+- **Game Designer** — the concept is ULTRA simple, instantly understood, fun
+  in under 3 seconds, and the game is a COMPLETE multi-level experience, not a
+  bare mechanic.
+- **Art Director** — the game is visually rich and coherent: real assets
+  everywhere, dense screens, zero procedural art, zero "AI look", zero photos.
+- **Gameplay Engineer** — clean delta-time canvas code, multiple levels with a
+  numeric difficulty curve, no leaks, no broken hitboxes, 60fps.
+- **QA Engineer** — nothing is done until it is RUN, PLAYED and SEEN with your
+  own eyes; console clean; responsive; ads wired correctly.
+- **Publisher Relations** — the game passes Playgama moderation on the first
+  try: SDK integrated correctly, ads placed exactly by policy, English text,
+  REPLAY always visible.
 
-You play FIVE expert roles at once, and every decision must survive all five
-reviews:
-
-- **Game Designer** - the gameplay is FUN first, functional second: a proven
-  loop, a first reward in seconds, meta progression, a "one more round" hook.
-- **Art Director** - the game is a visual masterpiece: coherent pack, rich
-  dense screens, deliberate palette, zero "AI look". Never a bare demo.
-- **Gameplay Engineer** - an ENGINE first (never vanilla), clean architecture,
-  delta-time logic, no leaks, no overlapping UI, no broken hitboxes.
-- **QA Engineer** - nothing is done until it is LAUNCHED, PLAYED and SEEN:
-  every screen run, every mechanic tested, console clean, responsive matrix
-  verified. Ultra-strict verification at every step.
-- **Publisher Relations** - the game must pass Playgama moderation on the
-  first try: required SDK steps, English text, no external requests, REPLAY
-  visible, ads placed correctly.
-
-**The benchmark is a MASTERPIECE, not a working game.** Deliver the game an
-expert team would be proud to ship: complete, functional, addictive and
-visually rich - a game that could sit next to the top hits of its genre.
-
----
-
-## How this skill set is organized (IMPORTANT)
-
-This skill is split into ONE orchestrator + FIVE specialized sub-skills so each
-loaded file stays small and focused. **The sub-skill content is NOT loaded
-automatically - you must LOAD it via the skill tool when the phase starts.**
-
-| Phase | Sub-skill to LOAD | Exit condition |
-|-------|-------------------|----------------|
-| 1. Gameplay design | `casual-game-builder-design` | Gate A |
-| 2. Engine + foundations | `casual-game-builder-engine` | Gate B |
-| 3. Asset hunt | `casual-game-builder-assets` | Gate C |
-| 4. Build screens | `casual-game-builder-engine` | Gate D (per screen) |
-| 5. Monetization / SDK | `casual-game-builder-monetization` | SDK wired |
-| 6. Code quality + responsive | `casual-game-builder-engine` | Gate E |
-| 7. Final verification + polish loop | `casual-game-builder-verification` | Gate F + delivery gate |
-
-At the START of each phase, invoke the skill tool with the sub-skill name and
-apply its rules before doing the phase work. Never skip loading a sub-skill
-"to save time" - the gates it contains are the contract. The golden rules
-below apply to ALL phases and always stay active.
+**The benchmark is a MASTERPIECE, not a working game.** A game that could sit
+next to the top hypercasual hits and not look out of place.
 
 ---
 
 ## Golden rules (NEVER violate)
 
-1. **Never generate or create images with AI.** Always use EXISTING assets
-   downloaded from free sources. Never create art procedurally with code.
-   Everything possible must be an asset: backgrounds, logo backgrounds,
-   buttons, HUD, particles, effects.
-2. **All game text is in English. Always.** Even if the user speaks French,
-   even if the player is French. Publishers are international: the game must
-   be in English.
-3. **Never create a "How to play" tutorial** - casual games must be understood
-   in <30 seconds without explanation. If the mechanic needs explanation, the
-   design is wrong, not the tutorial.
-4. **Art coherence is absolute**: assets from the SAME pack, same style, same
-   palette (3-4 dominant colors), same theme across every screen. This is the
-   best defense against the AI look.
-5. Buttons are ALWAYS asset images (with hover/pressed states), never
-   code/CSS-made buttons. Never create buttons from scratch with CSS.
-6. **Never cut corners to save time.** A game that looks "almost done" will be
-   rejected by publishers and players. Do every step.
-7. **NEVER hallucinate.** Never invent an API, a method, a texture key, an
-   asset filename or a class from memory. Everything must be verified against
-   a real, existing source before being used in code.
-8. **Never code against assets that do not exist.** Only reference assets
-   that have actually been downloaded and verified on disk (`ls`/glob on the
-   real folder). A typo in a filename = a broken game.
-9. **Never guess engine APIs.** Read the official documentation/examples of
-   the EXACT version you installed BEFORE writing the code that uses it. If
-   you cannot verify it, search the web for it.
-10. **USE THE MODEL'S VISION ON EVERYTHING.** The agent is a multimodal model:
-    it can SEE images. This is a superpower that must be used, never skipped.
-    - **VISION BEFORE VALIDATION, BEFORE IMPLEMENTATION - never after.** No
-      asset is validated (ticked in a checklist, entered in CREDITS.md, Gate
-      C) and NO asset enters the code until it has been OPENED and approved
-      with the eyes. No screen is done until it has been captured and viewed.
-      No level or feature is done until it has been watched in motion.
-    - OPEN every downloaded asset with the image read tool and really LOOK at
-      it: style, transparency, resolution, palette, proportions - decide
-      where and how big it should appear in the game FROM WHAT YOU SEE.
-    - Position and size every asset from what the vision shows (a sprite's
-      center, a button's padding, a digit's baseline), never from guesswork.
-    - LOOK at every screen after building it (screenshot + read) and at the
-      game running in motion before moving on.
-    - If the vision shows something wrong, fix it with the eyes, not with
-      random code tweaks.
-    - Visualize the whole game before delivery: capture every screen and
-      watch a full run in motion, and verify EVERYTHING with the eyes (HUD,
-      popups, transitions, particles, alignment in both orientations).
-    - If the eyes are unavailable in this environment (images cannot be
-      displayed/read), follow the mechanical fallback (verification skill,
-      section "Mechanical fallback") and RECORD it - never fake a vision
-      approval that did not happen.
-11. **FULL AUTONOMY - never ask the user a question.** The user gives one
-    short gameplay description and nothing else. From that moment the agent
-    decides EVERYTHING itself and does it: the theme, the art direction, the
-    mechanics, the core loop, the orientation, the palette, the sounds, the
-    difficulty curve, the levels, the polish. Do not come back to ask "which
-    theme do you want?", "portrait or landscape?", "how many levels?". When
-    unsure, make the most professional choice for the genre and move on. The
-    agent only talks to the user for TWO reasons: (a) final delivery of the
-    finished game, (b) reporting a hard blocker (real assets unobtainable
-    everywhere) with a recommended fix - and even then it keeps working on
-    everything else in parallel.
-12. **RICHNESS: many assets, never a sparse game.** "Real assets" alone is
-    not enough - there must be ENOUGH of them. The "few assets" look IS the
-    AI-generated look, no matter how good each asset is. Every screen must be
-    FULL of themed detail: layered background (3+ parallax planes), 2+
-    animated ambient decor elements, UI chrome, popups, particles, FX. The
-    gameplay must have variety: 3+ enemy/obstacle types, multiple
-    collectibles, 2+ power-ups, per-action feedback. A complete casual game
-    uses a rich, complete set of real asset files. If a screen looks bare,
-    empty or thin - it needs MORE assets: stop, go back to the hunt, bring
-    them ALL in, then continue. Sparse = fail (Gate C).
-13. **NEVER ship a basic game - build the COMPLETE addictive package.** A
-    game reduced to its bare mechanic (tap → score) is a bad game no matter
-    how pretty it is. The gameplay must be complete and deep, designed with
-    imagination: core loop + combo/streak system + 2+ power-ups + escalating
-    difficulty events + currency + meta progression (shop/skins/upgrades) +
-    level variety + milestones + juice on every action. The DEPTH PACKAGE
-    (design skill) is mandatory. The user's one-line description is the
-    SEED of the game, not its ceiling - expand it into the full professional
-    feature set the genre demands. A featureless design is an unfinished
-    design (Gate A).
-14. **ENGINE BEFORE CODE - NEVER vanilla.** Pick and pin the engine (Phaser
-    by default) and VERIFY it runs (empty scene boots, no console errors)
-    BEFORE writing any game feature. Raw vanilla canvas/DOM is not acceptable
-    for a casual game - it is the #1 cause of broken games, missing features
-    and shipping disasters. Gate B is the hard checkpoint: no engine pinned
-    and verified running = no game code at all.
-15. **RUN BEFORE CLAIM.** Nothing is ever "done" until the game has been
-    LAUNCHED (dev server running), PLAYED and SEEN (screenshot + vision). A
-    screen, a feature or a fix is NEVER validated from code alone - it must
-    run in a browser. Never report work as done without having launched and
-    looked at it; never admit "I didn't run it" - launching is a mandatory
-    step of every task, not an optional extra.
+1. **ZERO procedural graphics.** Never draw shapes (rectangles, circles,
+   gradients, paths) with code as the art. Never generate images with AI.
+   Every visual is a REAL downloaded asset: backgrounds, buttons, sprites,
+   icons, particles, FX. The canvas draws ASSET IMAGES, never primitive art.
+2. **ZERO "AI look".** Real assets from the SAME coherent pack, same style and
+   palette across every screen, screens FULL of themed detail, at least one
+   ambient element moving. Sparse, empty, generic or mismatched = fail.
+3. **REAL effects, REAL sounds, REAL sprites.** Game SFX and music are real
+   audio files (ogg/mp3), never synthesized beeps. The template's
+   `audio.tone()` is only a fallback for the generic UI click — never design
+   game audio around it.
+4. **CARTOON ONLY.** The world is a bright illustrated cartoon, expressible
+   with cartoon asset packs. No photos, no realism, no realistic textures.
+5. **All game text is in English. Always.** Publishers are international.
+6. **No tutorial.** A hypercasual game is understood in <3 seconds with zero
+   explanation. If it needs explanation, the design is wrong.
+7. **NEVER hallucinate.** Never invent an API, a method, an asset filename or
+   a class from memory. Verify against a real source before using.
+8. **Never code against assets that do not exist.** Only reference files
+   actually downloaded and verified on disk (`ls`/glob the real folder).
+9. **USE YOUR VISION ON EVERYTHING.** You can SEE images — use it, never skip
+   it. No asset is approved, no screen is done, no game is delivered until it
+   has been OPENED AND LOOKED AT with your eyes. Size and place every asset
+   from what you SEE, never from guesswork. If vision shows something wrong,
+   fix it with the eyes, not with random code tweaks.
+10. **FULL AUTONOMY.** The user gives a one-line idea (or nothing) and then
+    you decide EVERYTHING alone: concept, theme, palette, levels, sounds,
+    difficulty. Never ask "which theme?", "portrait or landscape?". The agent
+    only talks to the user at final delivery, or to report a hard blocker.
+11. **RUN BEFORE CLAIM.** Nothing is done until the game has been launched,
+    played and seen (screenshot + vision). Never validate from code alone.
+12. **ITERATE, NEVER ONE DRAFT.** The design phase and the asset phase are
+    written in LOOPS (design → score → critique → rewrite → re-score; hunt →
+    check → fill gaps → re-hunt) until the gates pass. A single pass is a
+    failed process.
+13. **TEMPLATE-BASED.** The game is built by INSTALLING the template repo and
+    customizing ONLY its customizable zones. Never rebuild the shell, never
+    modify the fixed pack/core/generic screens. All custom code lives in the
+    gameplay hook + the assets it needs.
 
 ---
 
-## Workflow (execution order)
+## THE TEMPLATE — install, customize, never break
 
-### 1. GitHub repo first
+The game is built on the **hypercasual-game-template** repo:
 
-Before building anything:
+```
+https://github.com/kingdannydushime1/hypercasual-game-template
+```
 
-1. Check the repo does not already exist:
-   `gh repo view <owner>/<repo-name> --json name` - if it errors, it does not
-   exist yet. Never create a duplicate.
-2. Create it: `gh repo create <repo-name> --public --source=. --push`.
-3. Push each update of the game to GitHub as you go (`git add -A && git commit
-   && git push`). The repo must never be more than a few commits behind the
-   local work.
+### 1. Install
 
-### 2. LOAD `casual-game-builder-design` - game design first
+Clone or copy the repo into the game folder and remove the `.git` directory
+(your game gets its OWN fresh git repo):
 
-**LOAD the design sub-skill via the skill tool BEFORE any asset download or
-code.** The design sub-skill contains: analyzing the gameplay, writing the
-COMPLETE GAMEDESIGN.md, the HIT-GAME PATTERN LIBRARY, the DEPTH PACKAGE,
-PRECISE OBJECTIVES, all levels, the interaction specification, and Gate A.
+```bash
+git clone https://github.com/kingdannydushime1/hypercasual-game-template.git game
+cd game && rm -rf .git && git init -b main && git add -A
+git -c user.name="you" -c user.email="you@users.noreply.github.com" commit -m "Init from hypercasual-game-template"
+```
 
-Exit condition: **Gate A fully ticked.** Nothing is coded, downloaded or
-engine-chosen with an unticked box.
+### 2. Structure (what is what)
 
-### 3. LOAD `casual-game-builder-engine` - choose the engine
+```
+game/
+├── index.html            → script order. May ADD <script> tags (sdk.js, sfx.js,
+│                           sprites data...), never remove/reorder existing ones.
+├── game-config.js        → ★ THE customizable config (see below)
+├── assets/
+│   ├── css/screen.css    → layout only. May add new layout rules for new HUD.
+│   ├── screens/          → ★ REPLACE menu-bg.png and gameplay-bg.png (themed)
+│   ├── ui/               → ⛔ FIXED gold pack. NEVER touch (buttons, panels...)
+│   ├── sprites/          → ★ NEW: your gameplay sprites (created by the asset phase)
+│   └── audio/            → ★ NEW: your real sound files + music
+└── src/
+    ├── core/             → ⛔ game.js, screen-manager.js, audio.js, input.js,
+    │                        storage.js. NEVER modify. (Add sdk.js/sfx.js here.)
+    ├── ui/ui-kit.js      → ⛔ Button, Panel. NEVER modify.
+    ├── screens/          → menu, pause, gameover, victory, shop = ⛔ generic,
+    │                        FIXED (button texts included). gameplay-screen.js
+    │                        = ★ THE GAMEPLAY HOOK (your whole game lives here).
+    └── main.js           → screen registration. NEVER modify.
+```
 
-**LOAD the engine sub-skill.** It contains: the engine choice (Phaser default,
-never vanilla), version pinning, the BOOT CHECK, the project structure, the
-state/reset contract. Exit condition: **Gate B** (engine pinned + boots with
-zero console errors + first commit pushed).
+Legend: ★ = customizable / the agent's job. ⛔ = fixed, identical for every game.
 
-### 4. LOAD `casual-game-builder-assets` - hunt ALL assets
+### 3. game-config.js — customize these fields only
 
-**LOAD the assets sub-skill.** It contains: primary sources + keyword search,
-how to pick a coherent pack, sprite sheet cutting, fonts, audio verification,
-performance budget, the EXHAUSTIVE asset list per category, the ASSETS.md
-manifest, the DENSITY rules and the asset research iteration. Exit condition:
-**Gate C** (every category filled, every asset on disk + approved, ASSETS.md +
-CREDITS.md complete, `sha256sum -c` passes).
+```js
+const GAME_CONFIG = {
+  id: 'my-game',                    // storage prefix (letters, dashes)
+  firstScreen: 'menu',              // first screen shown
+  playTarget: 'gameplay',           // where PLAY / RETRY / NEXT LEVEL go
+  title: 'MY GAME',                 // shown on the menu
+  backgrounds: {                     // replace the PNG files in assets/screens/
+    menu: 'assets/screens/menu-bg.png',
+    gameplay: 'assets/screens/gameplay-bg.png'
+  },
+  features: { shop: true },         // false removes the SHOP button AND screen
+  shop: { items: [                  // name in English, price in coins
+    { id: 'extra_heart', name: 'Heart +1', price: 100 }
+  ]},
+  hud: { showScore: true, showHearts: true, hearts: 3 }
+};
+```
 
-### 5. LOAD `casual-game-builder-engine` - build the screens
+### 4. The gameplay hook API (src/screens/gameplay-screen.js)
 
-**LOAD the engine sub-skill again.** It contains the screen-by-screen build
-order, the 6 mandatory screens (loading / menu / gameplay / pause / victory /
-game over) + optional screens, the POLISH TO THE PRO BAR rules (incl. the
-LAYOUT GUARDS: no overlapping UI), the responsive matrix, the code quality
-rules, the battle-tested code templates (config, state, input, storage, main,
-pooling) and the PROGRAMMING ITERATION. Exit condition per screen: **Gate D**,
-then **Gate E** once all code is written.
+The template gives you a running screen. You implement the game inside it:
 
-### 6. LOAD `casual-game-builder-monetization` - wire the SDK
+- `this.canvas` / `this.ctx` — your drawing surface. `resize()` already sets
+  `canvas.width/height` to CSS size × devicePixelRatio. In `render()`, first
+  do `ctx.setTransform(canvas.width / el.clientWidth, 0, 0,
+  canvas.height / el.clientHeight, 0, 0)` and draw in CSS pixels.
+- `loop(time)` → runs `update(delta)` + `render()` on RAF. `delta` is in
+  seconds. **Multiply every velocity/timer by delta.** Never animate per frame.
+- `update(delta)` — game logic here. `render()` — draw assets here.
+- HUD helpers: `setScore(n)` (updates the coin-score HUD),
+  `setHearts(n)` (updates the heart HUD; max = `config.hud.hearts`).
+- The pause button is already wired to `game.show('pause')`; `exit()`
+  auto-stops the RAF loop, so pause/resume comes free.
+- Transitions: `this.game.show('gameover')`, `this.game.show('victory')`,
+  `this.game.show('menu')`.
+- Persistence: `this.game.storage.get(key, fallback)` / `.set(key, value)`.
+- Mute state: `this.game.audio.settings.sound`.
+- **`build()` runs on EVERY visit to the screen** (each PLAY / RETRY / NEXT
+  LEVEL). Reset the run state there or in `enter()`. Load persistent progress
+  (current level, coins, best score) from storage.
+- **Multiple levels**: victory → `storage.set('level', level + 1)`. At
+  `build()`, read `storage.get('level', 1)` and apply that level's parameters
+  (speed, spawn density, new obstacle types, star thresholds). Level 1 must be
+  gentle, the ramp numeric and readable.
 
-**LOAD the monetization sub-skill.** It contains the verified Playgama Bridge
-v2 facts, the required SDK steps and the `src/sdk.js` wrapper template.
-Exit condition: SDK wired (initialize, game_ready, pause/audio events,
-interstitials at natural pauses, rewarded granted ONLY on `rewarded`), and the
-game runs WITH and WITHOUT the SDK.
+### 5. Real audio (never procedural beeps)
 
-### 7. LOAD `casual-game-builder-verification` - final verification + polish loop
+Add `src/core/sfx.js` + a `<script src="src/core/sfx.js">` tag in index.html,
+and your real files in `assets/audio/`. Keep the template's mute in sync:
 
-**LOAD the verification sub-skill.** It contains: the vision verification
-(mandatory), the mechanical fallback, the anti-AI-look checklist, the final
-gameplay-objective verification, the verification gates (including Gate F and
-the DELIVERY GATE), the meticulous inspection and the iteration & polish loop
-(run until a full loop finds NOTHING to fix).
+```js
+const SFX = (function () {
+  const sounds = {
+    collect: 'assets/audio/collect.ogg',
+    win: 'assets/audio/win.ogg',
+    lose: 'assets/audio/lose.ogg'
+  };
+  const cache = {};
+  let muted = false;
+  return {
+    setMuted(value) { muted = value; },
+    load() { Object.keys(sounds).forEach((n) => { cache[n] = new Audio(sounds[n]); }); },
+    play(name) {
+      if (muted || !cache[name]) return;
+      const a = cache[name].cloneNode();
+      a.volume = 0.8;
+      a.play().catch(() => {});
+    }
+  };
+})();
+```
+
+Call `SFX.setMuted(!this.game.audio.settings.sound)` when a screen starts, and
+`SFX.play('collect')` on gameplay events. **A sound must be attached to every
+reward/feedback moment** (collect, combo, milestone, victory, defeat, click).
 
 ---
 
-## Deliverable
+## WORKFLOW — six phases, each with a GATE
 
-The published game is a folder you can click and run locally (a web folder
-with index.html + assets) - the game must run by just opening index.html
-(or starting the dev server) and playing. The game repo lives on GitHub,
-committed as you go.
+Work in this exact order. A gate that is not fully ticked means the phase is
+NOT done. Re-run a gate whenever anything it covers changes.
 
-Final delivery message includes: the repo URL, how to run it, what was built,
-and a note on any asset/screen that was only mechanically verified (never fake
-a vision approval). Deliver ONLY after the DELIVERY GATE (verification skill)
-passes 100%.
+---
+
+### PHASE 1 — DESIGN (ITERATE until the concept is a hit)
+
+> Emphasis: the concept must be ULTRA simple, easy to understand, FUN, and
+> hypercasual. Then you design the COMPLETE gameplay that lists EVERY asset
+> the game will need. This phase runs in ITERATIONS with scores.
+
+1. **Invent the concept ALONE.** Generate a pool of 5-8 DIFFERENT original
+   hypercasual ideas (one line each). Each idea: ONE verb done perfectly
+   (tap, swipe, drag, aim, balance, stack...), understood in <3 seconds, a
+   bright cartoon world (NEVER photos/realism). Combine two verbs to force
+   originality. No match-3 / runner / flappy / merge clones.
+2. **Score every idea (0-10 each)** on: FUN IN 3 SECONDS, SATISFYING
+   (every action visibly pays), ADDICTIVE (one-more-round), HYPERCASUAL
+   (one gesture, glance-readable). Record the table, pick the winner by score
+   ALONE. Never ask the user.
+3. **Anti-clone kill-check BY SEARCH** (websearch): search the mechanic and
+   its variations; if a game already does the core action, the idea fails.
+   Record the search + comparison as evidence.
+4. **Hook line** — one catchy cartoon sentence ("You run a cartoon bakery
+   where every cake has a face and tries to escape before the oven timer").
+   If the line is flat, the idea is flat. Also describe the single most
+   selling thumbnail screenshot.
+5. **Design the COMPLETE gameplay and write GAMEDESIGN.md** with EXACT rules
+   and numbers:
+   - Core loop in one sentence; main action; win/lose conditions.
+   - Theme + art direction in one precise sentence (named style + max 4-color
+     palette). Portrait or landscape with a reason.
+   - Session length (30-90s per run) and the one-more-round hook.
+   - **ALL levels designed**: complete progression, numeric difficulty curve
+     (+X% speed per level, +Y spawn density, new obstacle every N levels),
+     star thresholds.
+   - DEPTH package (5-8 features with exact numbers): combo/multiplier,
+     2+ power-ups, escalating difficulty, coins + meta, milestones, best-score
+     chase, near-miss, juice on every action.
+   - Full scoring rules; full state machine; interaction spec (object ×
+     action × result).
+   - **THE COMPLETE ASSET LIST — the bridge to the asset phase.** Every asset
+     the game needs, as a table: Asset | Type (sprite/button/icon/panel/
+     particle/audio/music) | Where used | Size. Cover: backgrounds, player
+     sprite + ALL animations, 3+ enemy/obstacle types, 2+ collectibles,
+     2+ power-ups, HUD icons, popups, particles/confetti, ALL sounds, music,
+     fonts, favicon. If the list is thin, the game is thin — expand the design.
+   - Simulations (first-contact, full-run, retention, failure) — simulate
+     play sessions in your head and record the findings.
+6. **ITERATE with scores (mandatory).** Score the draft as the AUTHOR, then
+   re-score the same document as a HOSTILE ENEMY (rejecting clones, ugly
+   games, shallow games) — keep the LOWER score. Rewrite every weakness, do
+   not patch. Re-score. Then launch a SUBAGENT (Task tool) to score the 9
+   dimensions COLD as an independent senior game designer. Target: independent
+   score ≥ 78/90 with NO dimension below 7. Two consecutive iterations that
+   do not improve the score = change the approach, kill the weak idea, do not
+   polish it.
+
+**Gate A** — concept original (search-verified), ultra-simple hypercasual
+hook, cartoon-only, full GAMEDESIGN.md written, ALL levels numeric, complete
+asset list covering every screen, simulations recorded, independent score
+passes. One unchecked box = rewrite.
+
+---
+
+### PHASE 2 — ASSET RESEARCH (ITERATE until EVERY asset is found and APPROVED BY VISION)
+
+> Emphasis: after the design, you must FIND every asset the gameplay lists,
+> use the RIGHT ones, and confirm each one BY VISION. Resize/crop sprites when
+> needed. This phase runs in LOOPS until the full list is covered.
+
+1. **Build the search list from GAMEDESIGN.md** — one line per asset with
+   type, theme, mood, target size. This list IS the hunt checklist.
+2. **Hunt** — primary sources first: **Kenney.nl** (almost everything),
+   **OpenGameArt**, **Game-icons.net** (icons), **Google Fonts** (self-hosted),
+   **CraftPix freebies**. If a source lacks it, run keyword web searches
+   (`free <theme> <type> cartoon png`, `CC0 <theme> sprite pack`). NEVER
+   search photo/realistic terms. Skip any site behind login/captcha instantly.
+3. **License on every asset** — CC0 (no credit) or CC-BY (credit in
+   CREDITS.md). Unknown license = discard.
+4. **Download and verify on disk**:
+   ```bash
+   curl -L -o pack.zip "https://<direct-url>"   # follow redirects
+   unzip -t pack.zip && unzip -o pack.zip -d assets/
+   ls -la assets/                                 # confirm real files
+   sha256sum assets/sprites/coin.png             # record in ASSETS.md
+   ```
+5. **APPROVE EVERY ASSET WITH YOUR VISION — this is mandatory, never skipped.**
+   Open each image and really LOOK: style (matches the DA?), palette,
+   transparency (PNG alpha for sprites/UI), resolution (a 32x32 sprite never
+   stretched to 500px), proportions (where/how big it appears in the game is
+   decided FROM WHAT YOU SEE). A file that does not match the pack style or
+   looks photorealistic is DISCARDED on sight. Only approved assets enter the
+   code. Record `approved: vision <date>` in ASSETS.md.
+6. **Resize / crop sprites when needed** (ImageMagick or ffmpeg):
+   ```bash
+   # resize to exact size (sprites, buttons, icons)
+   convert in.png -resize 128x128 out.png
+   # crop transparent padding off a loose sprite
+   convert in.png -trim +repage out.png
+   # cut a sprite sheet into frames (values FROM VISION: count frames first)
+   convert sheet.png -crop 64x64 +repage frame-%d.png
+   # encode audio: always ship OGG + MP3 for every sound
+   ffmpeg -i music.wav -ar 44100 -ac 2 -b:a 128k music.ogg
+   ffmpeg -i music.wav -ar 44100 -ac 2 -b:a 128k -c:a libmp3lame music.mp3
+   ```
+   Re-verify resized/cut files with VISION (no distortion, no cropped frames).
+7. **Track everything**: ASSETS.md (path | source URL | license | sha256 |
+   resolution | approval) and CREDITS.md (source + license, human-facing).
+   Update as you go, never at the end.
+8. **DENSITY — no screen may look empty.** Themed layered background, 2+
+   animated ambient elements, 3+ enemy/obstacle types, multiple collectibles,
+   2+ power-ups, per-action FX, popups, particles. Sparse = the AI look = fail.
+9. **ITERATE until complete.** Walk the full list; every item found, approved,
+   resized, recorded. Any missing asset: search other sources, vary keywords,
+   or adjust the design's asset variant — NEVER ship with a missing or
+   placeholder asset, NEVER substitute a mismatched-style asset "because it's
+   close". When a gap cannot be closed, reconsider that one design element.
+   Re-run the loop until every category is filled.
+
+**Gate C** — every asset in GAMEDESIGN.md's list exists on disk, VISION-
+approved, sized correctly, recorded in ASSETS.md (sha256 matches) + CREDITS.md.
+Zero missing, zero photorealistic, zero mismatch.
+
+---
+
+### PHASE 3 — INSTALL THE TEMPLATE & CONFIGURE
+
+1. Install the template (section THE TEMPLATE) into the game folder.
+2. Create the game's GitHub repo FIRST (check no duplicate): `gh repo create
+   <game-name> --public --source=. --push`. Commit as you go.
+3. Edit `game-config.js`: id, title, features.shop, shop.items, hud — exactly
+   as designed in GAMEDESIGN.md.
+4. Replace `assets/screens/menu-bg.png` and `gameplay-bg.png` with the
+   themed backgrounds from Phase 2. VISION-check each screen for readability.
+5. Add the `<script>` tags for `src/core/sdk.js` and `src/core/sfx.js` in
+   index.html, plus the Playgama bridge script (Phase 5).
+
+**Gate B** — config set, backgrounds swapped, game boots with zero console
+errors (`python3 -m http.server` + open, or the project's dev server), first
+commit pushed.
+
+---
+
+### PHASE 4 — IMPLEMENT THE GAMEPLAY (multiple levels, real assets)
+
+1. Implement the whole game in `src/screens/gameplay-screen.js` using the hook
+   API. Delta-time logic. Every visual is an asset image drawn to the canvas
+   (or HUD element); zero primitive-drawn art.
+2. **Multiple levels** exactly as designed: `storage.get('level', 1)` at
+   `build()`, per-level parameters applied, `storage.set('level', level+1)`
+   on victory. Numeric difficulty ramp, new obstacles/patterns over levels.
+3. Wire **real sounds** (SFX module) to every action: collect, combo,
+   milestone, victory, defeat, click.
+4. Wire **effects**: particles, popups, shake/flash — all asset-based
+   (sprite particles, asset popup images, CSS shake). Per-action feedback.
+5. Wire coin economy + shop: coins earned every run (even failed), spent or
+   doubled per design. `storage.set('coins', ...)`.
+6. Keep the fixed screens' contract: gameover REVIVE restores the run where it
+   ended; victory advances the level. Your gameplay must expose what those
+   screens need (state read from storage at build).
+7. **The code <-> assets cross-check (zero missing paths)** — run whenever
+   code or assets change:
+   ```bash
+   rg -o '"assets/[^"]+"' src/ | tr -d '"' | sort -u | while read f; do
+     test -f "$f" || echo "MISSING: $f"; done
+   ```
+   Zero "MISSING" lines before moving on. Also grep for unused assets and
+   delete them.
+8. **RUN BEFORE CLAIM**: launch, PLAY a full level, screenshot the screen,
+   LOOK at it with vision. Every screen (menu, gameplay, pause, gameover,
+   victory, shop if enabled) built and seen before continuing.
+
+**Gate D** — game plays start to finish (level 1 → victory → level 2),
+multiple levels with a numeric ramp, every gameplay asset real and used,
+sounds on every action, no MISSING files, console clean, screens visually
+checked.
+
+---
+
+### PHASE 5 — PLAYGAMA SDK (integrated carefully — this is a hard requirement)
+
+> The SDK is the #1 place games break. Follow this EXACTLY. **Two ad types:
+> interstitials, and rewarded.** The game must run WITH and WITHOUT the SDK.
+
+**Install:** add BEFORE your app scripts in index.html:
+`<script src="https://bridge.playgama.com/v2/stable/playgama-bridge.js"></script>`.
+Then `src/core/sdk.js` (global wrapper, plain script):
+
+```js
+const SDK = (function () {
+  const bridgePromise = (window.bridge && window.bridge.initialize)
+    ? window.bridge.initialize().then(function () { return window.bridge; })
+    : Promise.resolve(null);
+  const wrap = function (fn) { return function () { return bridgePromise.then(fn); }; };
+  return {
+    available: wrap(function (b) { return !!b; }),
+    gameReady: wrap(function (b) { if (b) b.platform.sendMessage('game_ready'); }),
+    levelMessage: wrap(function (b) { return function (name) { if (b) b.platform.sendMessage(name); }; }),
+    interstitial: wrap(function (b) {
+      if (b && b.advertisement && b.advertisement.isInterstitialSupported) {
+        try { b.advertisement.showInterstitial(); } catch (e) {}
+      }
+    }),
+    rewarded: wrap(function (b) {   // resolves true ONLY on state 'rewarded'
+      if (!b || !b.advertisement || !b.advertisement.isRewardedSupported) return false;
+      return new Promise(function (resolve) {
+        var settled = false;
+        var done = function (ok) { if (!settled) { settled = true; resolve(ok); } };
+        var onState = function (state) {
+          if (state === 'rewarded') done(true);
+          else if (state === 'closed' || state === 'failed') done(false);
+        };
+        b.advertisement.on(b.EVENT_NAME.REWARDED_STATE_CHANGED, onState);
+        try { b.advertisement.showRewarded(); } catch (e) { done(false); }
+      });
+    }),
+    onPlatformPause: wrap(function (b) {
+      try { if (b) b.platform.on(b.EVENT_NAME.PAUSE_STATE_CHANGED, function () {}); } catch (e) {}
+    }),
+    onAudioChanged: wrap(function (b) {
+      try { if (b) b.platform.on(b.EVENT_NAME.AUDIO_STATE_CHANGED, function () {}); } catch (e) {}
+    })
+  };
+})();
+```
+
+Subscribe ONCE to pause + audio events; in ONE handler pause the gameplay AND
+mute SFX (host fires them for tab switches, ad openings, system pause). Apply
+`bridge.platform.isAudioEnabled` at start. Send `game_ready` when the first
+playable frame is ready. Persist progress via `bridge.storage` when available
+(fall back to localStorage — the template's `Storage` still works without SDK).
+
+**THE 2 AD TYPES — placement policy (MANDATORY):**
+
+**A. Interstitials — after 2 CONSECUTIVE same-outcome runs.**
+- Keep a streak counter. Every FINISHED run (win OR loss) increments it; a
+  run of the opposite outcome resets it.
+- After the counter reaches **2 (two wins in a row, or two losses in a row)**,
+  show an interstitial at the next natural pause (game over / victory
+  transition). Then reset the counter.
+- NEVER mid-gameplay. NEVER right after a rewarded ad (no double ads back to
+  back). Skipped entirely when `isInterstitialSupported` is false. Max ~1
+  interstitial per 2 runs.
+
+**B. Rewarded ads — the player CHOOSES, and the reward is granted ONLY on the
+`rewarded` state (never on `closed`).**
+1. **Game Over → REVIVE.** The REVIVE button (next to RETRY, always visible)
+   opens a rewarded video. Watched to `rewarded` → the run resumes EXACTLY
+   where it ended (same score, same level, same state). **Once per run.** When
+   rewarded is unsupported, hide REVIVE — never break REPLAY.
+2. **Victory → DOUBLE COINS / BONUS.** The button opens a rewarded video.
+   Watched to `rewarded` → victory reward (coins) is doubled. Closed/failed →
+   keep the base reward, never remove it. Hidden when unsupported.
+3. **Shop → at least 50% of shop items get a "WATCH AD" option.** If the shop
+   exists, for at least half of its items a rewarded video grants the item
+   without spending coins (BUY stays available too). The button states the
+   reward ("Watch ad to get X"). Never more than one rewarded ad per finished
+   run (revive OR bonus, not both).
+
+**Moderation checklist (Playgama) — pass every box before delivery:**
+- ZIP with `index.html` at root, ≤ 300 MB; title in English.
+- Ads ONLY through the Playgama Bridge; zero third-party ads, zero external
+  network calls at runtime, zero outgoing links.
+- Rewarded = player opts in via a clear button that states (1) they will watch
+  an ad and (2) what they get; reward is a bonus, never required to continue.
+- FORBIDDEN: rewarded "+1 life" every time a life is lost. The once-per-run
+  REVIVE restore is compliant; a per-death loop is not.
+- Sound AND gameplay paused during any full-screen ad.
+- REPLAY always present and immediately reachable — an ad never blocks it.
+- Progress survives ad transitions (state preserved after returning).
+- `game_ready` sent; `level_started/paused/resumed/completed/failed` sent at
+  the right moments.
+
+**Gate E** — bridge script present, initialize + game_ready + pause/audio
+handlers wired once, interstitials after exactly 2 consecutive same-outcome
+runs, rewarded granted ONLY on `rewarded`, REVIVE once per run, BONUS doubles
+only on `rewarded`, ≥50% of shop items ad-obtainable, REPLAY always visible,
+game verified WITH and WITHOUT the SDK, zero console errors.
+
+---
+
+### PHASE 6 — FINAL VERIFICATION & POLISH LOOP
+
+1. **Play the whole game with your eyes.** Launch it, play several runs, beat
+   levels, die, revive, win, shop, pause, quit. Screenshot EVERY screen and
+   LOOK: density (no empty zones), alignment, readable HUD, no overlapping
+   UI, coherent palette.
+2. **Watch it in motion**: particles, popups, animations, transitions, and
+   the level-to-level difficulty ramp. Fix what looks wrong with the eyes.
+3. **Responsive matrix**: portrait AND landscape, desktop AND phone width,
+   different zoom levels — nothing cut off, buttons tappable, HUD intact.
+4. **Technical**: zero console errors, no leaks (pause/resume repeatedly),
+   stable 60fps during heavy scenes (cap particles), runs with the SDK AND
+   without it.
+5. **Ads flow test**: play 2 wins in a row → interstitial appears; 2 losses →
+   interstitial; revive restores the run; double coins doubles; shop watch-ad
+   works. Re-check Gate E boxes live.
+6. **Moderation re-check**: run the checklist from Phase 5 box by box.
+7. **POLISH LOOP**: run the whole review; fix EVERYTHING found; re-run until
+   a full loop finds NOTHING to fix. A loop that finds nothing = done.
+
+**Gate F / DELIVERY GATE** — game played start-to-finish and seen with vision
+on every screen; console clean; responsive; ads policy verified live; no
+missing assets; all moderation boxes ticked; game committed and pushed to its
+own GitHub repo; runnable locally by opening the folder.
+
+---
+
+## DELIVERABLE
+
+- The game is a folder you can click and run (`index.html` + assets), living
+  in its own GitHub repo, committed as you go.
+- Final delivery message includes: the repo URL, how to run it, what was built
+  (concept, levels, depth, assets, SDK/ads), a Playgama submission note (ZIP,
+  title, metadata, partner-readiness), and a list of anything that was only
+  mechanically verified (never fake a vision approval).
