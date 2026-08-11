@@ -77,6 +77,37 @@ next to the top hypercasual hits and not look out of place.
 
 ---
 
+## HOW THIS SKILL SET IS CONNECTED (3 skills, 3 files)
+
+This orchestrator is ONE skill of a THREE-skill set. Each skill lives in its
+own folder/file and is loaded at the right moment with the skill tool — never
+copied into this file:
+
+| Skill | Folder | When it is loaded | What it owns |
+|---|---|---|---|
+| **casual-game-builder** (this one) | `skill/casual-game-builder/` | from the start | The whole production: design (P1), assets (P2), template install/config (P3), SDK/ads (P5), and it ORCHESTRATES the other two |
+| **casual-game-builder-engine** | `skill/casual-game-builder-engine/` | at **PHASE 4** | Writes the game code: zero errors, responsive, multi-level, real-asset canvas |
+| **casual-game-builder-verification** | `skill/casual-game-builder-verification/` | at **PHASE 6** | Re-checks that EVERYTHING was implemented and every objective is reached, then the polish loop |
+
+The connection contract:
+
+1. **Load, never paste.** This skill LOADS the other two with the skill tool at
+   their phases. Each skill is self-contained but references the shared
+   contract below — that is how they stay in sync without being one file.
+2. **Shared contract (all three read it from THIS file):** the game is built
+   on the `hypercasual-game-template` repo, the exact hook API in
+   `src/screens/gameplay-screen.js`, `config/config.js`, `storage`,
+   `sdk`, `audio`, `fx` and the `GAMEDESIGN.md` document produced in P1.
+3. **Hand-off order:** engine finishes → hands to orchestrator at **Gate D** →
+   orchestrator does SDK (P5) → **Gate E** → hands to verification (P6) →
+   verification reports back at **Gate F**. Each hand-off names what the next
+   skill must re-check; a skill never assumes a phase it did not run.
+4. **Fixes flow back.** If verification finds a bug, it fixes simple things
+   itself but re-loads the engine skill for anything that touches game logic,
+   so the coding rules are never bypassed.
+
+---
+
 ## THE TEMPLATE — install, customize, never break
 
 The game is built on the **hypercasual-game-template** repo:
@@ -403,39 +434,42 @@ commit pushed.
 
 ---
 
-### PHASE 4 — IMPLEMENT THE GAMEPLAY (multiple levels, real assets)
+### PHASE 4 — IMPLEMENT THE GAMEPLAY (delegate to the ENGINE skill)
 
-1. Implement the whole game in `src/screens/gameplay-screen.js` using the hook
+> **LOAD `casual-game-builder-engine` with the skill tool NOW and follow it for
+> the entire implementation.** The engine skill owns: zero-error coding rules,
+> the responsive discipline, the multi-level implementation, the real-asset
+> canvas wiring, the code↔assets cross-check and the run-and-look loop. The
+> steps below are only the hand-off summary; the engine file is the authority.
+
+1. LOAD `casual-game-builder-engine` and apply it top to bottom.
+2. Implement the whole game in `src/screens/gameplay-screen.js` using the hook
    API. Delta-time logic. Every visual is an asset image drawn to the canvas
    (or HUD element); zero primitive-drawn art.
-2. **Multiple levels** exactly as designed: `storage.get('level', 1)` at
+3. **Multiple levels** exactly as designed: `storage.get('level', 1)` at
    `build()`, per-level parameters applied, `storage.set('level', level+1)`
    on victory. Numeric difficulty ramp, new obstacles/patterns over levels.
-3. Wire **real sounds** (SFX module) to every action: collect, combo,
+4. Wire **real sounds** (SFX module) to every action: collect, combo,
    milestone, victory, defeat, click.
-4. Wire **effects**: particles, popups, shake/flash — all asset-based
+5. Wire **effects**: particles, popups, shake/flash — all asset-based
    (sprite particles, asset popup images, CSS shake). Per-action feedback.
-5. Wire coin economy + shop: coins earned every run (even failed), spent or
+6. Wire coin economy + shop: coins earned every run (even failed), spent or
    doubled per design. `storage.set('coins', ...)`.
-6. Keep the fixed screens' contract: gameover REVIVE restores the run where it
+7. Keep the fixed screens' contract: gameover REVIVE restores the run where it
    ended; victory advances the level. Your gameplay must expose what those
    screens need (state read from storage at build).
-7. **The code <-> assets cross-check (zero missing paths)** — run whenever
-   code or assets change:
-   ```bash
-   rg -o '"assets/[^"]+"' src/ | tr -d '"' | sort -u | while read f; do
-     test -f "$f" || echo "MISSING: $f"; done
-   ```
-   Zero "MISSING" lines before moving on. Also grep for unused assets and
-   delete them.
-8. **RUN BEFORE CLAIM**: launch, PLAY a full level, screenshot the screen,
+8. **Responsive, zero-error, zero missing paths — full matrix tested** (this
+   is the engine skill's core promise, verify each box in the engine file).
+9. **RUN BEFORE CLAIM**: launch, PLAY a full level, screenshot the screen,
    LOOK at it with vision. Every screen (menu, gameplay, pause, gameover,
    victory, shop if enabled) built and seen before continuing.
 
 **Gate D** — game plays start to finish (level 1 → victory → level 2),
 multiple levels with a numeric ramp, every gameplay asset real and used,
-sounds on every action, no MISSING files, console clean, screens visually
-checked.
+sounds on every action, no MISSING files, console clean, responsive in the
+full matrix, screens visually checked. **Hand back to the orchestrator with
+a note of what was implemented and what to re-check in P5.**
+
 
 ---
 
@@ -549,30 +583,24 @@ WITHOUT the SDK, zero console errors.
 
 ---
 
-### PHASE 6 — FINAL VERIFICATION & POLISH LOOP
+### PHASE 6 — FINAL VERIFICATION & POLISH LOOP (delegate to the VERIFICATION skill)
 
-1. **Play the whole game with your eyes.** Launch it, play several runs, beat
-   levels, die, revive, win, shop, pause, quit. Screenshot EVERY screen and
-   LOOK: density (no empty zones), alignment, readable HUD, no overlapping
-   UI, coherent palette.
-2. **Watch it in motion**: particles, popups, animations, transitions, and
-   the level-to-level difficulty ramp. Fix what looks wrong with the eyes.
-3. **Responsive matrix**: portrait AND landscape, desktop AND phone width,
-   different zoom levels — nothing cut off, buttons tappable, HUD intact.
-4. **Technical**: zero console errors, no leaks (pause/resume repeatedly),
-   stable 60fps during heavy scenes (cap particles), runs with the SDK AND
-   without it.
-5. **Ads flow test**: play 2 wins in a row → interstitial appears; 2 losses →
-   interstitial; revive restores the run; double coins doubles; shop watch-ad
-   works. Re-check Gate E boxes live.
-6. **Moderation re-check**: run the checklist from Phase 5 box by box.
-7. **POLISH LOOP**: run the whole review; fix EVERYTHING found; re-run until
-   a full loop finds NOTHING to fix. A loop that finds nothing = done.
+> **LOAD `casual-game-builder-verification` with the skill tool NOW and follow
+> it.** The verification skill owns the complete re-check: every designed
+> objective realized, every asset wired, every screen seen, responsive matrix,
+> ads policy verified live, and the polish loop until a full run finds nothing.
+
+1. LOAD `casual-game-builder-verification` and apply it top to bottom.
+2. Re-check Gate E boxes live as part of its ads-flow test (interstitials,
+   rewarded, revive, shop).
+3. Its **Gate F / DELIVERY GATE** becomes the delivery gate here.
 
 **Gate F / DELIVERY GATE** — game played start-to-finish and seen with vision
 on every screen; console clean; responsive; ads policy verified live; no
 missing assets; all moderation boxes ticked; game committed and pushed to its
-own GitHub repo; runnable locally by opening the folder.
+own GitHub repo; runnable locally by opening the folder. Verification skill
+reports its findings back here before the final delivery message.
+
 
 ---
 

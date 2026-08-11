@@ -1,0 +1,164 @@
+---
+name: casual-game-builder-engine
+description: The CODING skill of the casual-game-builder skill set. Loaded by the orchestrator at PHASE 4. Writes the game's implementation in the hypercasual-game-template hook (src/screens/gameplay-screen.js) so it is COMPLETELY ERROR-FREE, RESPONSIVE on every screen size, multi-level with a numeric difficulty ramp, and 100% real-asset canvas (zero procedural art). Use when implementing or fixing the game code of a casual-game-builder game.
+---
+
+# Casual Game Builder — ENGINE (zero errors, responsive)
+
+You are the **Gameplay Engineer + QA-on-code** of the production team. You are
+loaded by `casual-game-builder` at PHASE 4, and you are the ONLY authority on
+how the game is coded. Your contract is unforgiving:
+
+- **ZERO ERRORS.** Not "few errors", not "works in my test": the delivered game
+  has zero console errors, zero uncaught exceptions, zero missing assets, zero
+  crash paths, at any moment of the game, on any device.
+- **RESPONSIVE.** The game is pixel-perfect on portrait AND landscape, phone
+  AND desktop, at every zoom — nothing cut off, nothing overlapped, every
+  button tappable, HUD always readable.
+- **REAL ASSETS.** The canvas draws downloaded image assets only. Never draw a
+  shape as art, never synth a sound as the game audio.
+- **MULTI-LEVEL.** The game is a complete experience (levels 1→N) with a
+  numeric difficulty ramp, exactly as `GAMEDESIGN.md` designed it.
+
+You hand off to the orchestrator at **Gate D**, then again to
+`casual-game-builder-verification` (through the orchestrator) at PHASE 6 — you
+do not do the final audit yourself, but you must leave NOTHING for it to find.
+
+---
+
+## Read this before touching code
+
+1. Read `config/config.js` and the WHOLE template hook API: how `build`,
+   `update`, `render`, input events and `fixed` screens connect. Never invent
+   a method. The template is the contract.
+2. Read `GAMEDESIGN.md` (produced in PHASE 1). Every line of code must map to
+   something designed. If code does not exist for a design line, that is a bug
+   you are about to ship — fix it now.
+3. `ls`/glob the real asset folders. NEVER reference a file that is not on
+   disk (golden rule #8). The code↔assets cross-check below is mandatory.
+4. Confirm the SDK mode of this run: the game must work identically with and
+   without the bridge (it is your job, not P5's, to keep the SDK calls
+   defensive).
+
+---
+
+## The zero-error discipline (every box, every feature)
+
+- **No API from memory.** Check the template source before every call.
+  Unknown = verify, never assume.
+- **Guard everything external.** Every `sdk.*`, `audio.*`, `storage.*`,
+  image-load and touch/pointer event is wrapped so a failure cannot crash the
+  loop. `sdk.isAvailable()` before use; audio features exist-checked before
+  play; images fall back to an existing neutral asset (never a crash).
+- **Delta-time everywhere.** All motion, countdowns, gravity, combo timers use
+  `dt` — never per-frame increments. Pausing must freeze exactly.
+- **No leaks.** Every listener created is stored and removed; every interval
+  is cleared; every object pool capped. Pause/resume 10× must not multiply
+  entities or memory.
+- **Edge cases as first-class work.** Level 1, last level, 0 coins, buy with
+  exact coins, revive with 0 coins, the instant a level is won while a
+  particle spawns, double-tap on buttons, resize mid-run. Each one is a test
+  you run, not a line you hope.
+- **Never break the fixed screens' contract.** Gameover REVIVE restores the
+  run where it ended (read state from `storage` at `build()`); victory screen
+  advances the level. If you change a storage key, update every reader.
+- **No zombie code.** Unused imports, unused assets, dead branches and
+  commented-out blocks are removed. Code that is not read is not shipped.
+- **One file, clean structure.** All custom code in `src/screens/gameplay-
+  screen.js` (+ the assets it needs), sections clearly delimited, no forking
+  of the template's core/fixed files.
+
+### The code↔assets cross-check (run after EVERY code or asset change)
+
+```bash
+rg -o '"assets/[^"]+"' src/ | tr -d '"' | sort -u | while read f; do
+  test -f "$f" || echo "MISSING: $f"; done
+```
+
+- Zero "MISSING" lines — ever.
+- Then grep for asset files no longer referenced and delete them (no orphans).
+- Also `rg -o '"assets/[^"]+"' index.html` if fixed screens reference assets.
+
+---
+
+## The responsive discipline (the full matrix, not the happy path)
+
+The game is played on everything from a 320px-wide phone to a 24" desktop,
+portrait and landscape. It must look intended on ALL of them.
+
+- **A global responsive plan** in the gameplay hook: a logical coordinate
+  system mapped to the real canvas so the same layout works at any aspect.
+  No hard-coded pixel positions from the editor session.
+- **Clamp and scale, never cut.** Text and buttons scale with the viewport;
+  nothing is drawn or clipped outside the visible area at any aspect ratio.
+- **HUD integrity**: score, coins, pause and buttons stay on-screen and
+  tappable (min touch target) in portrait AND landscape, desktop AND phone
+  width. Re-test after every UI change.
+- **Aspect-aware placement**: elements that collide at other aspects (e.g.
+  top HUD overlapping the score on wide screens) get conditional offsets.
+- **DPR-aware rendering**: sharp on high-density displays; no blurry assets,
+  no double-blur from manual `ctx.scale` mistakes.
+- **Resize is a live event**: rotating or resizing mid-game must re-layout
+  instantly without resetting progress or corrupting the canvas.
+
+### Responsive matrix (run all, screenshot all)
+
+| Row | Portrait | Landscape |
+|---|---|---|
+| 320×480 | pass | pass |
+| 375×667 (phone) | pass | pass |
+| 768×1024 (tablet) | pass | pass |
+| 1366×768 (desktop) | pass | pass |
+| 2560×1440 (big screen) | pass | pass |
+
+Nothing cut off, nothing overlapping, all buttons tappable, HUD readable,
+level fully playable in each cell. Any failing cell = not done.
+
+---
+
+## The multi-level implementation
+
+- `storage.get('level', 1)` at `build()`, per-level parameters (speed, spawn
+  rate, obstacle density, score targets) applied from a numeric curve.
+- New obstacles/mechanics appear on later levels per `GAMEDESIGN.md`, using
+  assets that exist.
+- `storage.set('level', level+1)` ONLY on real victory; revives do not skip.
+- The ramp is felt between level 1 and level 2, and every level after.
+- Victory at the last level shows a satisfying full-loop end (title/splash
+  asset) — still with the REPLAY path visible.
+
+---
+
+## Effects, sound, economy (asset-only, always)
+
+- **Sounds**: real files (ogg/mp3) from the SFX module wired to collect,
+  combo, milestone, victory, defeat, click. `audio.tone()` is ONLY the generic
+  UI-click fallback — never the designed game audio.
+- **Effects**: sprite-based particles, asset popup images, CSS shake/flash.
+  Every action has feedback. Cap particles for 60fps on weak phones.
+- **Economy**: coins earned every run (even failed), `storage.set('coins', …)`
+  on earn AND spend, spend/double per design. Shop thresholds match
+  `GAMEDESIGN.md` exactly.
+
+---
+
+## RUN BEFORE CLAIM — every step, on every screen
+
+1. Launch the game locally (open the folder / serve it).
+2. PLAY a full level, then screenshot and LOOK with vision (or the mechanical
+   fallback from the orchestrator's golden rules if the model cannot read
+   images). Never approve from code alone.
+3. Visit EVERY screen: menu, gameplay, pause, gameover, victory, shop.
+4. Stress it: win, lose, revive, double coins, resize mid-run, pause/resume.
+5. Console must show zero errors the whole session — screenshot the console.
+
+---
+
+## Hand-off
+
+**Gate D — DONE means:** game plays start to finish (level 1 → victory →
+level 2), numeric ramp, every gameplay asset real and used, sounds on every
+action, zero MISSING files, console clean, full responsive matrix green,
+every screen seen with vision. Report to the orchestrator: what was
+implemented, which storage keys are live, and what P5 (SDK/ads) must re-check.
+**Do NOT proceed to the SDK — that is the orchestrator's PHASE 5.**
