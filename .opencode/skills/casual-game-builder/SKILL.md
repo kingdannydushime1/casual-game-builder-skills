@@ -230,15 +230,23 @@ NOT done. Re-run a gate whenever anything it covers changes.
 > hypercasual. Then you design the COMPLETE gameplay that lists EVERY asset
 > the game will need. This phase runs in ITERATIONS with scores.
 
-1. **Invent the concept ALONE.** Generate a pool of 5-8 DIFFERENT original
-   hypercasual ideas (one line each). Each idea: ONE verb done perfectly
-   (tap, swipe, drag, aim, balance, stack...), understood in <3 seconds, a
-   bright cartoon world (NEVER photos/realism). Combine two verbs to force
-   originality. No match-3 / runner / flappy / merge clones.
+1. **The concept — from the user OR invented by you, always simple
+   hypercasual.**
+   - If the USER provided a concept (a theme, a mechanic, a one-line idea):
+     take it as the seed. Simplify it down to its hypercasual essence — ONE
+     verb done perfectly, understood in <3 seconds, a bright cartoon world —
+     polish it, never fight it. A user concept that is too complex is
+     SIMPLIFIED, not discarded.
+   - If NO concept was given: invent one yourself. Generate a pool of 5-8
+     DIFFERENT original hypercasual ideas (one line each). Each idea: ONE verb
+     (tap, swipe, drag, aim, balance, stack...), instantly understood, a
+     bright cartoon world (NEVER photos/realism). Combine two verbs to force
+     originality. No match-3 / runner / flappy / merge clones.
 2. **Score every idea (0-10 each)** on: FUN IN 3 SECONDS, SATISFYING
    (every action visibly pays), ADDICTIVE (one-more-round), HYPERCASUAL
-   (one gesture, glance-readable). Record the table, pick the winner by score
-   ALONE. Never ask the user.
+   (one gesture, glance-readable). Record the table. For an invented pool,
+   pick the winner by score ALONE — never ask the user. For a user-given
+   concept, keep it (it is already chosen).
 3. **Anti-clone kill-check BY SEARCH** (websearch): search the mechanic and
    its variations; if a game already does the core action, the idea fails.
    Record the search + comparison as evidence.
@@ -246,8 +254,28 @@ NOT done. Re-run a gate whenever anything it covers changes.
    where every cake has a face and tries to escape before the oven timer").
    If the line is flat, the idea is flat. Also describe the single most
    selling thumbnail screenshot.
-5. **Design the COMPLETE gameplay and write GAMEDESIGN.md** with EXACT rules
-   and numbers:
+5. **LAUNCH MULTIPLE DESIGN TEAMS (Task tool, in parallel) — each team
+   imagines its part of the game's composition. This is where everything
+   that makes the game COOL is imagined.** Launch 4+ independent subagents at
+   the same time, each with a domain and an art-direction brief (theme,
+   palette, cartoon style). Each team returns a detailed creative proposal
+   with EXACT visual details:
+   - **World & Environment team**: background + parallax layers, floor /
+     platforms, ambient decor, the look and mood of every screen.
+   - **Characters & Enemies team**: the player, and 3+ enemy/obstacle types
+     with their sprites, animations, behaviors and personalities.
+   - **Collectibles & Power-ups team**: coins, collectibles, 2+ power-ups —
+     their sprites and on-screen effects.
+   - **FX, Audio & Juice team**: particles, popups, screen effects (shake,
+     flash, confetti), ALL sounds and music, and the feedback attached to
+     every action.
+   - **Progression & Meta team**: level themes/variations, milestones,
+     shop items, unlocks.
+   Tell every team: cartoon-only, no photos, palette ≤4 dominant colors,
+   asset packs must be able to express it, FUN first. You MERGE all proposals
+   into the design — nothing is invented later in the code.
+6. **Assemble the COMPLETE gameplay design and write GAMEDESIGN.md** with
+   EXACT rules and numbers, from the teams' proposals:
    - Core loop in one sentence; main action; win/lose conditions.
    - Theme + art direction in one precise sentence (named style + max 4-color
      palette). Portrait or landscape with a reason.
@@ -268,7 +296,7 @@ NOT done. Re-run a gate whenever anything it covers changes.
      fonts, favicon. If the list is thin, the game is thin — expand the design.
    - Simulations (first-contact, full-run, retention, failure) — simulate
      play sessions in your head and record the findings.
-6. **ITERATE with scores (mandatory).** Score the draft as the AUTHOR, then
+7. **ITERATE with scores (mandatory).** Score the draft as the AUTHOR, then
    re-score the same document as a HOSTILE ENEMY (rejecting clones, ugly
    games, shallow games) — keep the LOWER score. Rewrite every weakness, do
    not patch. Re-score. Then launch a SUBAGENT (Task tool) to score the 9
@@ -277,10 +305,12 @@ NOT done. Re-run a gate whenever anything it covers changes.
    do not improve the score = change the approach, kill the weak idea, do not
    polish it.
 
-**Gate A** — concept original (search-verified), ultra-simple hypercasual
-hook, cartoon-only, full GAMEDESIGN.md written, ALL levels numeric, complete
-asset list covering every screen, simulations recorded, independent score
-passes. One unchecked box = rewrite.
+**Gate A** — concept fixed (user-given, simplified to hypercasual, OR invented
+alone), original (search-verified), ultra-simple hypercasual hook, cartoon-only,
+MULTIPLE design teams ran in parallel and their proposals merged into the
+design, full GAMEDESIGN.md written, ALL levels numeric, complete asset list
+covering every screen, simulations recorded, independent score passes. One
+unchecked box = rewrite.
 
 ---
 
