@@ -53,6 +53,13 @@ next to the top hypercasual hits and not look out of place.
    has been OPENED AND LOOKED AT with your eyes. Size and place every asset
    from what you SEE, never from guesswork. If vision shows something wrong,
    fix it with the eyes, not with random code tweaks.
+   **MECHANICAL FALLBACK**: if your model CANNOT read images (the read tool
+   returns "this model does not support image input"), NEVER fake a vision
+   approval. Verify mechanically instead: `identify`/`convert` for real
+   dimensions, format, alpha channel and a color histogram (a red/magenta icon
+   = heart, a gold/yellow icon = star/coin, blue/gray = the "empty" state),
+   and decide size/placement from those measured values. Record the truth in
+   ASSETS.md: `approved: vision <date>` OR `approved: mechanical <date>`.
 10. **FULL AUTONOMY.** The user gives a one-line idea (or nothing) and then
     you decide EVERYTHING alone: concept, theme, palette, levels, sounds,
     difficulty. Never ask "which theme?", "portrait or landscape?". The agent
@@ -106,10 +113,12 @@ game/
     ├── core/             → ⛔ game.js, screen-manager.js, audio.js, input.js,
     │                        storage.js. NEVER modify. (Add sdk.js/sfx.js here.)
     ├── ui/ui-kit.js      → ⛔ Button, Panel. NEVER modify.
-    ├── screens/          → menu, pause, gameover, victory, shop = ⛔ generic,
-    │                        FIXED (button texts included). gameplay-screen.js
-    │                        = ★ THE GAMEPLAY HOOK (your whole game lives here).
-    └── main.js           → screen registration. NEVER modify.
+    ├── screens/          → loading, menu, pause, gameover, victory, shop =
+    │                        ⛔ generic, FIXED (button texts included).
+    │                        gameplay-screen.js = ★ THE GAMEPLAY HOOK
+    │                        (your whole game lives here).
+    └── main.js           → screen registration (loading is always first).
+                            NEVER modify.
 ```
 
 Legend: ★ = customizable / the agent's job. ⛔ = fixed, identical for every game.
@@ -119,9 +128,13 @@ Legend: ★ = customizable / the agent's job. ⛔ = fixed, identical for every g
 ```js
 const GAME_CONFIG = {
   id: 'my-game',                    // storage prefix (letters, dashes)
-  firstScreen: 'menu',              // first screen shown
+  firstScreen: 'loading',           // the loading screen always runs first
   playTarget: 'gameplay',           // where PLAY / RETRY / NEXT LEVEL go
-  title: 'MY GAME',                 // shown on the menu
+  title: 'MY GAME',                 // shown on the loading screen + menu
+  loading: {                        // ★ list EVERY image the game uses here
+    loadTarget: 'menu',             //   so the loading bar fills with real
+    assets: []                      //   progress (sprites, FX, backgrounds...)
+  },
   backgrounds: {                     // replace the PNG files in assets/screens/
     menu: 'assets/screens/menu-bg.png',
     gameplay: 'assets/screens/gameplay-bg.png'
@@ -133,6 +146,12 @@ const GAME_CONFIG = {
   hud: { showScore: true, showHearts: true, hearts: 3 }
 };
 ```
+
+**Template icons (from the pack, do not rename):** the gameplay HUD hearts are
+`assets/ui/l1.png` (filled) / `l2.png` (empty). The Victory and Game Over
+screens show a star row — `s1.png` (filled) / `s2.png` (empty) — driven by the
+`{ stars: n }` option: call `game.show('victory', { stars: n })` or
+`game.show('gameover', { stars: n })` from the gameplay hook.
 
 ### 4. The gameplay hook API (src/screens/gameplay-screen.js)
 
@@ -160,6 +179,10 @@ The template gives you a running screen. You implement the game inside it:
   `build()`, read `storage.get('level', 1)` and apply that level's parameters
   (speed, spawn density, new obstacle types, star thresholds). Level 1 must be
   gentle, the ramp numeric and readable.
+- **Loading screen**: the loading screen preloads every image you list in
+  `config.loading.assets` (plus the fixed pack + backgrounds) and drives the
+  progress bar with the real percentage. List every gameplay image (sprites,
+  FX, extra backgrounds) there so the player sees true progress.
 
 ### 5. Real audio (never procedural beeps)
 
@@ -269,11 +292,16 @@ passes. One unchecked box = rewrite.
 
 1. **Build the search list from GAMEDESIGN.md** — one line per asset with
    type, theme, mood, target size. This list IS the hunt checklist.
-2. **Hunt** — primary sources first: **Kenney.nl** (almost everything),
-   **OpenGameArt**, **Game-icons.net** (icons), **Google Fonts** (self-hosted),
-   **CraftPix freebies**. If a source lacks it, run keyword web searches
-   (`free <theme> <type> cartoon png`, `CC0 <theme> sprite pack`). NEVER
-   search photo/realistic terms. Skip any site behind login/captcha instantly.
+2. **Hunt — itch.io FIRST (top priority).** Search itch.io for theme/genre
+   packs (`itch.io game assets <theme> <type>`, `site:itch.io <theme>
+   sprites pack`, `site:itch.io <theme> background`). Many packs there are
+   CC0 / CC-BY / commercial-friendly with a direct .zip download. Then the
+   reliable fallbacks: **Kenney.nl** (almost everything), **OpenGameArt**,
+   **Game-icons.net** (icons), **Google Fonts** (self-hosted), **CraftPix
+   freebies**. If a source is behind an account/captcha/login wall, skip it
+   instantly and go to the next result. When the packs fall short, run
+   keyword web searches (`free <theme> <type> cartoon png`, `CC0 <theme>
+   sprite pack`). NEVER search photo/realistic terms.
 3. **License on every asset** — CC0 (no credit) or CC-BY (credit in
    CREDITS.md). Unknown license = discard.
 4. **Download and verify on disk**:
@@ -289,7 +317,9 @@ passes. One unchecked box = rewrite.
    stretched to 500px), proportions (where/how big it appears in the game is
    decided FROM WHAT YOU SEE). A file that does not match the pack style or
    looks photorealistic is DISCARDED on sight. Only approved assets enter the
-   code. Record `approved: vision <date>` in ASSETS.md.
+   code. Record `approved: vision <date>` in ASSETS.md. (If this model cannot
+   read images, apply the MECHANICAL FALLBACK from golden rule 9 and record
+   `approved: mechanical <date>` — never fake a vision approval.)
 6. **Resize / crop sprites when needed** (ImageMagick or ffmpeg):
    ```bash
    # resize to exact size (sprites, buttons, icons)
@@ -325,10 +355,13 @@ Zero missing, zero photorealistic, zero mismatch.
 ### PHASE 3 — INSTALL THE TEMPLATE & CONFIGURE
 
 1. Install the template (section THE TEMPLATE) into the game folder.
-2. Create the game's GitHub repo FIRST (check no duplicate): `gh repo create
-   <game-name> --public --source=. --push`. Commit as you go.
+2. Create the game's GitHub repo FIRST — **named after the game**, in its own
+   repo (never inside the skill or template repos): check no duplicate
+   (`gh repo view <owner>/<game-name>`), then
+   `gh repo create <game-name> --public --source=. --push`. Commit as you go.
 3. Edit `game-config.js`: id, title, features.shop, shop.items, hud — exactly
-   as designed in GAMEDESIGN.md.
+   as designed in GAMEDESIGN.md — and list every gameplay image in
+   `loading.assets` so the loading bar fills with real progress.
 4. Replace `assets/screens/menu-bg.png` and `gameplay-bg.png` with the
    themed backgrounds from Phase 2. VISION-check each screen for readability.
 5. Add the `<script>` tags for `src/core/sdk.js` and `src/core/sfx.js` in
@@ -390,17 +423,18 @@ const SDK = (function () {
   const bridgePromise = (window.bridge && window.bridge.initialize)
     ? window.bridge.initialize().then(function () { return window.bridge; })
     : Promise.resolve(null);
-  const wrap = function (fn) { return function () { return bridgePromise.then(fn); }; };
+  const call = function (fn) { return function () { return bridgePromise.then(fn); }; };
   return {
-    available: wrap(function (b) { return !!b; }),
-    gameReady: wrap(function (b) { if (b) b.platform.sendMessage('game_ready'); }),
-    levelMessage: wrap(function (b) { return function (name) { if (b) b.platform.sendMessage(name); }; }),
-    interstitial: wrap(function (b) {
+    available: call(function (b) { return !!b; }),
+    gameReady: call(function (b) { if (b) b.platform.sendMessage('game_ready'); }),
+    loadingProgress: call(function (b, p) { if (b) b.setGameLoadingProgress(p); }),
+    levelMessage: call(function (b, name) { if (b) b.platform.sendMessage(name); }),
+    interstitial: call(function (b) {
       if (b && b.advertisement && b.advertisement.isInterstitialSupported) {
         try { b.advertisement.showInterstitial(); } catch (e) {}
       }
     }),
-    rewarded: wrap(function (b) {   // resolves true ONLY on state 'rewarded'
+    rewarded: call(function (b) {   // resolves true ONLY on state 'rewarded'
       if (!b || !b.advertisement || !b.advertisement.isRewardedSupported) return false;
       return new Promise(function (resolve) {
         var settled = false;
@@ -413,15 +447,21 @@ const SDK = (function () {
         try { b.advertisement.showRewarded(); } catch (e) { done(false); }
       });
     }),
-    onPlatformPause: wrap(function (b) {
-      try { if (b) b.platform.on(b.EVENT_NAME.PAUSE_STATE_CHANGED, function () {}); } catch (e) {}
+    onPlatformPause: call(function (b, cb) {
+      try { if (b) b.platform.on(b.EVENT_NAME.PAUSE_STATE_CHANGED, cb); } catch (e) {}
     }),
-    onAudioChanged: wrap(function (b) {
-      try { if (b) b.platform.on(b.EVENT_NAME.AUDIO_STATE_CHANGED, function () {}); } catch (e) {}
+    onAudioChanged: call(function (b, cb) {
+      try { if (b) b.platform.on(b.EVENT_NAME.AUDIO_STATE_CHANGED, cb); } catch (e) {}
     })
   };
 })();
 ```
+
+Usage: `SDK.gameReady()`, `SDK.loadingProgress(p)` (0..1, called by the loading
+screen), `SDK.levelMessage('level_started')`, `SDK.onPlatformPause(cb)`,
+`SDK.onAudioChanged(cb)`, `SDK.interstitial()`, `SDK.rewarded()` (awaited).
+`call` forwards extra arguments to the resolved bridge handler, so callbacks
+flow through correctly.
 
 Subscribe ONCE to pause + audio events; in ONE handler pause the gameplay AND
 mute SFX (host fires them for tab switches, ad openings, system pause). Apply
@@ -471,10 +511,11 @@ playable frame is ready. Persist progress via `bridge.storage` when available
   the right moments.
 
 **Gate E** — bridge script present, initialize + game_ready + pause/audio
-handlers wired once, interstitials after exactly 2 consecutive same-outcome
-runs, rewarded granted ONLY on `rewarded`, REVIVE once per run, BONUS doubles
-only on `rewarded`, ≥50% of shop items ad-obtainable, REPLAY always visible,
-game verified WITH and WITHOUT the SDK, zero console errors.
+handlers wired once, loading screen drives `SDK.loadingProgress`, interstitials
+after exactly 2 consecutive same-outcome runs, rewarded granted ONLY on
+`rewarded`, REVIVE once per run, BONUS doubles only on `rewarded`, ≥50% of
+shop items ad-obtainable, REPLAY always visible, game verified WITH and
+WITHOUT the SDK, zero console errors.
 
 ---
 
@@ -508,7 +549,8 @@ own GitHub repo; runnable locally by opening the folder.
 ## DELIVERABLE
 
 - The game is a folder you can click and run (`index.html` + assets), living
-  in its own GitHub repo, committed as you go.
+  in **its own GitHub repo NAMED AFTER THE GAME** (never inside the skill or
+  template repos), committed as you go and pushed when finished.
 - Final delivery message includes: the repo URL, how to run it, what was built
   (concept, levels, depth, assets, SDK/ads), a Playgama submission note (ZIP,
   title, metadata, partner-readiness), and a list of anything that was only
