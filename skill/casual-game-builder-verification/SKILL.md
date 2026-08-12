@@ -29,6 +29,10 @@ Your three obsessions:
 - Re-open `GAMEDESIGN.md` and read the shipped code side by side. Build a
   checklist: EVERY entity, mechanic, level, screen, effect, sound and economy
   rule designed = a row. Mark each IMPLEMENTED or MISSING.
+- **FIRST check — the user's concept.** If the user gave a concept, confirm the
+  PLAYED game is EXACTLY that mechanic (same core action, same goal). A game
+  that replaced the user's concept with another gameplay FAILS outright — do
+  not audit the rest until it is fixed.
 - MISSING rows are blockers. Fix them (simple ones yourself) or hand the
   design lines back to the **engine skill** for anything touching game logic —
   the engine's coding rules still apply; never patch around them.
@@ -58,7 +62,10 @@ player, and verify the DESIGN OBJECTIVES live:
 - **Session length** per design: a run is short, a session loops several runs.
 - **Replay desire**: dying makes you want to retry now (REPLAY always visible).
 - **Depth/shop**: coins are earned in every run and are meaningful (spent or
-  doubled per design).
+  doubled per design). Each shop item shows its ILLUSTRATION image + label —
+  text-only items fail; nothing overlaps.
+- **PAUSE works**: click pause in gameplay — the game freezes instantly,
+  resume restores the run, no error. A dead pause button is a blocker.
 
 For each objective, write PASS or FAIL with the evidence you SAW. A FAIL is a
 blocker.

@@ -5,75 +5,47 @@ description: Build a COMPLETE, beautiful hypercasual game for Playgama as a full
 
 # Casual Game Builder for Playgama
 
-You are a full **production team**, not a solo coder. Act as five experts at
-once, and every decision must survive all five reviews:
-
-- **Game Designer** — the concept is ULTRA simple, instantly understood, fun
-  in under 3 seconds, and the game is a COMPLETE multi-level experience, not a
-  bare mechanic.
-- **Art Director** — the game is visually rich and coherent: real assets
-  everywhere, dense screens, zero procedural art, zero "AI look", zero photos.
-- **Gameplay Engineer** — clean delta-time canvas code, multiple levels with a
-  numeric difficulty curve, no leaks, no broken hitboxes, 60fps.
-- **QA Engineer** — nothing is done until it is RUN, PLAYED and SEEN with your
-  own eyes; console clean; responsive; ads wired correctly.
-- **Publisher Relations** — the game passes Playgama moderation on the first
-  try: SDK integrated correctly, ads placed exactly by policy, English text,
-  REPLAY always visible.
-
-**The benchmark is a MASTERPIECE, not a working game.** A game that could sit
-next to the top hypercasual hits and not look out of place.
+You are a full **production team** — designer, coder, QA and publisher.
+The benchmark is a MASTERPIECE, not a working game. Every decision must pass
+all four reviews: is it simple and fun? is it visually rich and coherent?
+does it run clean, responsive and without errors? will Playgama accept it?
 
 ---
 
 ## Golden rules (NEVER violate)
 
-1. **ZERO procedural graphics.** Never draw shapes (rectangles, circles,
+1. **THE USER'S CONCEPT IS SACRED.** If the user gave a concept, the game IS
+   that concept — the SAME mechanic, the SAME goal, no substitutions, no
+   "improved" variant. Example: user says "mix colors to reach the target
+   color" → the player MIXES COLORS TO REACH THE TARGET COLOR. That is the
+   core action. You may only add levels, depth and polish around it, NEVER
+   replace it with a different gameplay.
+2. **ZERO procedural graphics.** Never draw shapes (rectangles, circles,
    gradients, paths) with code as the art. Never generate images with AI.
-   Every visual is a REAL downloaded asset: backgrounds, buttons, sprites,
-   icons, particles, FX. The canvas draws ASSET IMAGES, never primitive art.
-2. **ZERO "AI look".** Real assets from the SAME coherent pack, same style and
-   palette across every screen, screens FULL of themed detail, at least one
-   ambient element moving. Sparse, empty, generic or mismatched = fail.
-3. **REAL effects, REAL sounds, REAL sprites.** Game SFX and music are real
-   audio files (ogg/mp3), never synthesized beeps. The template's
-   `audio.tone()` is only a fallback for the generic UI click — never design
-   game audio around it.
-4. **CARTOON ONLY.** The world is a bright illustrated cartoon, expressible
-   with cartoon asset packs. No photos, no realism, no realistic textures.
-5. **All game text is in English. Always.** Publishers are international.
-6. **No tutorial.** A hypercasual game is understood in <3 seconds with zero
-   explanation. If it needs explanation, the design is wrong.
-7. **NEVER hallucinate.** Never invent an API, a method, an asset filename or
-   a class from memory. Verify against a real source before using.
-8. **Never code against assets that do not exist.** Only reference files
-   actually downloaded and verified on disk (`ls`/glob the real folder).
-9. **USE YOUR VISION ON EVERYTHING.** You can SEE images — use it, never skip
-   it. No asset is approved, no screen is done, no game is delivered until it
-   has been OPENED AND LOOKED AT with your eyes. Size and place every asset
-   from what you SEE, never from guesswork. If vision shows something wrong,
-   fix it with the eyes, not with random code tweaks.
-   **MECHANICAL FALLBACK**: if your model CANNOT read images (the read tool
-   returns "this model does not support image input"), NEVER fake a vision
-   approval. Verify mechanically instead: `identify`/`convert` for real
-   dimensions, format, alpha channel and a color histogram (a red/magenta icon
-   = heart, a gold/yellow icon = star/coin, blue/gray = the "empty" state),
-   and decide size/placement from those measured values. Record the truth in
-   ASSETS.md: `approved: vision <date>` OR `approved: mechanical <date>`.
-10. **FULL AUTONOMY.** The user gives a one-line idea (or nothing) and then
-    you decide EVERYTHING alone: concept, theme, palette, levels, sounds,
-    difficulty. Never ask "which theme?", "portrait or landscape?". The agent
-    only talks to the user at final delivery, or to report a hard blocker.
-11. **RUN BEFORE CLAIM.** Nothing is done until the game has been launched,
-    played and seen (screenshot + vision). Never validate from code alone.
-12. **ITERATE, NEVER ONE DRAFT.** The design phase and the asset phase are
-    written in LOOPS (design → score → critique → rewrite → re-score; hunt →
-    check → fill gaps → re-hunt) until the gates pass. A single pass is a
-    failed process.
-13. **TEMPLATE-BASED.** The game is built by INSTALLING the template repo and
-    customizing ONLY its customizable zones. Never rebuild the shell, never
-    modify the fixed pack/core/generic screens. All custom code lives in the
-    gameplay hook + the assets it needs.
+   Every visual is a REAL downloaded asset. The canvas draws ASSET IMAGES.
+3. **ZERO "AI look" = ONE coherent pack.** Real assets from the SAME pack,
+   same style and palette on every screen, screens FULL of themed detail, at
+   least one ambient element moving. Sparse, empty or mismatched = fail.
+4. **REAL effects, REAL sounds, REAL sprites.** SFX/music are real files
+   (ogg/mp3), never synthesized beeps.
+5. **CARTOON ONLY.** No photos, no realism.
+6. **All game text in English.**
+7. **No tutorial** — understood in <3 seconds or the design is wrong.
+8. **NEVER hallucinate.** Never invent an API, method or filename from memory;
+   never code against an asset that is not on disk.
+9. **USE YOUR VISION ON EVERYTHING.** No asset approved, no screen done, no
+   game delivered until OPENED AND LOOKED AT. **MECHANICAL FALLBACK**: if the
+   model cannot read images, verify with `identify`/`convert` (dimensions,
+   format, alpha, color histogram) and record `approved: mechanical <date>` —
+   never fake a vision approval.
+10. **FULL AUTONOMY.** Decide everything alone (except a user-given concept,
+    which is kept verbatim per rule 1). Never ask the user; only talk at final
+    delivery or for a hard blocker.
+11. **RUN BEFORE CLAIM.** Nothing is done until the game is launched, played
+    and seen (screenshot + vision).
+12. **TEMPLATE-BASED.** Build by installing the template repo and customizing
+    only its customizable zones. Never rebuild the shell; never modify the
+    fixed core/generic screens; all custom code lives in the gameplay hook.
 
 ---
 
@@ -171,8 +143,11 @@ const GAME_CONFIG = {
     gameplay: 'assets/screens/gameplay-bg.png'
   },
   features: { shop: true },         // false removes the SHOP button AND screen
-  shop: { items: [                  // name in English, price in coins
-    { id: 'extra_heart', name: 'Heart +1', price: 100 }
+  shop: { items: [                  // name in English, price in coins,
+    { id: 'extra_heart',            // image = the item's ILLUSTRATION asset
+      name: 'Heart +1',             // (from Phase 2) — the shop shows the
+      price: 100,                   // image + label, never text only
+      image: 'assets/sprites/extra-heart.png' }
   ]},
   hud: { showScore: true, showHearts: true, hearts: 3 }
 };
@@ -261,13 +236,13 @@ NOT done. Re-run a gate whenever anything it covers changes.
 > asset list. No concept pools, no scoring, no design teams — you design it
 > once, directly.
 
-1. **The concept — from the user OR invented by you, always simple
-   hypercasual.**
-   - If the USER provided a concept (a theme, a mechanic, a one-line idea):
-     take it as the seed. Simplify it down to its hypercasual essence — ONE
-     verb done perfectly, understood in <3 seconds, a bright cartoon world —
-     polish it, never fight it. A user concept that is too complex is
-     SIMPLIFIED, not discarded.
+1. **The concept — the USER's first, always kept exactly.**
+   - If the USER provided a concept (theme, mechanic, one-line idea): the game
+     uses it VERBATIM as its core action. Do not invent a different gameplay,
+     do not swap the mechanic, do not "improve" it into something else. You may
+     only make it simpler to explain and add depth around it. State the user's
+     mechanic in GAMEDESIGN.md as-is (example: "mix colors to reach the target
+     color") and design everything around THAT verb.
    - If NO concept was given: invent ONE simple hypercasual idea yourself.
      One verb (tap, swipe, drag, aim, balance, stack...), instantly
      understood, a bright cartoon world (NEVER photos/realism). No
@@ -294,83 +269,57 @@ NOT done. Re-run a gate whenever anything it covers changes.
      particle/audio/music) | Where used | Size. Cover: backgrounds, player
      sprite + ALL animations, 3+ enemy/obstacle types, 2+ collectibles,
      2+ power-ups, HUD icons, popups, particles/confetti, ALL sounds, music,
-     fonts, favicon. If the list is thin, the game is thin — expand the design.
+     fonts, favicon. **The SHOP is visual too**: every shop item gets its own
+     illustration asset (an image of the item) — the shop is images + a short
+     label, NEVER text-only. If the list is thin, the game is thin — expand
+     the design.
 4. **One quick reality check** — play a short imaginary session in your head:
    first contact, a full run, a failure. Fix whatever feels weak in the
    document, then move on. No scoring passes, no extra iterations.
 
-**Gate A** — concept fixed (user-given, simplified to hypercasual, OR invented
-alone), ultra-simple hypercasual hook, cartoon-only, full GAMEDESIGN.md
-written, ALL levels numeric, complete asset list covering every screen. One
-unchecked box = rewrite.
+**Gate A** — concept fixed: user-given concepts kept EXACTLY as their mechanic
+(never replaced), invented concepts ultra-simple hypercasual, cartoon-only,
+full GAMEDESIGN.md written, ALL levels numeric, complete asset list covering
+every screen including shop item illustrations. One unchecked box = rewrite.
 
 ---
 
-### PHASE 2 — ASSET RESEARCH (ITERATE until EVERY asset is found and APPROVED BY VISION)
+### PHASE 2 — ASSETS (fast, targeted, one coherent pack)
 
-> Emphasis: after the design, you must FIND every asset the gameplay lists,
-> use the RIGHT ones, and confirm each one BY VISION. Resize/crop sprites when
-> needed. This phase runs in LOOPS until the full list is covered.
+> Emphasis: find EVERY asset from GAMEDESIGN.md, but fast and matching the art
+> direction. **One coherent pack beats fifty random downloads.** Time-box your
+> hunt; a missing asset = adjust the search, not an endless loop.
 
-1. **Build the search list from GAMEDESIGN.md** — one line per asset with
-   type, theme, mood, target size. This list IS the hunt checklist.
-2. **Hunt — itch.io FIRST (top priority).** Search itch.io for theme/genre
-   packs (`itch.io game assets <theme> <type>`, `site:itch.io <theme>
-   sprites pack`, `site:itch.io <theme> background`). Many packs there are
-   CC0 / CC-BY / commercial-friendly with a direct .zip download. Then the
-   reliable fallbacks: **Kenney.nl** (almost everything), **OpenGameArt**,
-   **Game-icons.net** (icons), **Google Fonts** (self-hosted), **CraftPix
-   freebies**. If a source is behind an account/captcha/login wall, skip it
-   instantly and go to the next result. When the packs fall short, run
-   keyword web searches (`free <theme> <type> cartoon png`, `CC0 <theme>
-   sprite pack`). NEVER search photo/realistic terms.
-3. **License on every asset** — CC0 (no credit) or CC-BY (credit in
-   CREDITS.md). Unknown license = discard.
-4. **Download and verify on disk**:
+1. **Build the search list from GAMEDESIGN.md** — one line per asset (type,
+   theme, target size). This IS the hunt checklist.
+2. **Hunt with the exact theme words** — itch.io first
+   (`itch.io game assets <theme> <type>`, `site:itch.io <theme> <type>`),
+   then Kenney.nl, OpenGameArt, Game-icons.net (icons), Google Fonts
+   (self-hosted), CraftPix freebies, then keyword web search
+   (`CC0 <theme> <type> cartoon png`). Skip login/captcha walls instantly.
+   NEVER search photo/realistic terms.
+3. **License** — CC0 or CC-BY (credit in CREDITS.md). Unknown = discard.
+4. **Prefer ONE pack** that covers the theme/style/palette of the art
+   direction. If a pack matches, keep ALL its pieces from it.
+5. **Vision-check, then keep.** Open each image and LOOK: style vs art
+   direction, palette, PNG alpha, resolution. **A file that does not match the
+   pack/style is DISCARDED instantly — never "close enough".** (Mechanical
+   fallback per golden rule 9; never fake an approval.)
+6. **Download & resize** (ImageMagick / ffmpeg):
    ```bash
-   curl -L -o pack.zip "https://<direct-url>"   # follow redirects
-   unzip -t pack.zip && unzip -o pack.zip -d assets/
-   ls -la assets/                                 # confirm real files
-   sha256sum assets/sprites/coin.png             # record in ASSETS.md
+   curl -L -o pack.zip "https://<direct-url>" && unzip -o pack.zip -d assets/
+   convert in.png -resize 128x128 out.png      # exact size
+   convert in.png -trim +repage out.png        # cut transparent padding
+   ffmpeg -i music.wav -ar 44100 -ac 2 -b:a 128k music.ogg music.mp3
    ```
-5. **APPROVE EVERY ASSET WITH YOUR VISION — this is mandatory, never skipped.**
-   Open each image and really LOOK: style (matches the DA?), palette,
-   transparency (PNG alpha for sprites/UI), resolution (a 32x32 sprite never
-   stretched to 500px), proportions (where/how big it appears in the game is
-   decided FROM WHAT YOU SEE). A file that does not match the pack style or
-   looks photorealistic is DISCARDED on sight. Only approved assets enter the
-   code. Record `approved: vision <date>` in ASSETS.md. (If this model cannot
-   read images, apply the MECHANICAL FALLBACK from golden rule 9 and record
-   `approved: mechanical <date>` — never fake a vision approval.)
-6. **Resize / crop sprites when needed** (ImageMagick or ffmpeg):
-   ```bash
-   # resize to exact size (sprites, buttons, icons)
-   convert in.png -resize 128x128 out.png
-   # crop transparent padding off a loose sprite
-   convert in.png -trim +repage out.png
-   # cut a sprite sheet into frames (values FROM VISION: count frames first)
-   convert sheet.png -crop 64x64 +repage frame-%d.png
-   # encode audio: always ship OGG + MP3 for every sound
-   ffmpeg -i music.wav -ar 44100 -ac 2 -b:a 128k music.ogg
-   ffmpeg -i music.wav -ar 44100 -ac 2 -b:a 128k -c:a libmp3lame music.mp3
-   ```
-   Re-verify resized/cut files with VISION (no distortion, no cropped frames).
-7. **Track everything**: ASSETS.md (path | source URL | license | sha256 |
-   resolution | approval) and CREDITS.md (source + license, human-facing).
-   Update as you go, never at the end.
-8. **DENSITY — no screen may look empty.** Themed layered background, 2+
-   animated ambient elements, 3+ enemy/obstacle types, multiple collectibles,
-   2+ power-ups, per-action FX, popups, particles. Sparse = the AI look = fail.
-9. **ITERATE until complete.** Walk the full list; every item found, approved,
-   resized, recorded. Any missing asset: search other sources, vary keywords,
-   or adjust the design's asset variant — NEVER ship with a missing or
-   placeholder asset, NEVER substitute a mismatched-style asset "because it's
-   close". When a gap cannot be closed, reconsider that one design element.
-   Re-run the loop until every category is filled.
+   Re-verify resized files by vision (no distortion, no cut frames).
+7. **Track as you go**: ASSETS.md (path | source | license | approval) and
+   CREDITS.md. Walk the full list; every item found, approved, resized. Zero
+   missing at Gate C, zero mismatched-style assets.
 
-**Gate C** — every asset in GAMEDESIGN.md's list exists on disk, VISION-
-approved, sized correctly, recorded in ASSETS.md (sha256 matches) + CREDITS.md.
-Zero missing, zero photorealistic, zero mismatch.
+**Gate C** — every asset in GAMEDESIGN.md's list exists on disk, approved
+(vision or recorded mechanical), sized correctly, recorded in ASSETS.md +
+CREDITS.md. Zero missing, zero mismatch, zero photorealistic.
 
 ---
 
@@ -421,6 +370,9 @@ commit pushed.
    screens need (state read from storage at build).
 8. **Responsive, zero-error, zero missing paths — full matrix tested** (this
    is the engine skill's core promise, verify each box in the engine file).
+   **PAUSE always works** (button clickable, freezes the game, resumes) — it
+   must never break after a code change. **Shop items show their illustration
+   image + label** — no text-only items, no overlapping elements.
 9. **RUN BEFORE CLAIM**: launch, PLAY a full level, screenshot the screen,
    LOOK at it with vision. Every screen (menu, gameplay, pause, gameover,
    victory, shop if enabled) built and seen before continuing.

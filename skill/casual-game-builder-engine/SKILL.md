@@ -32,7 +32,9 @@ do not do the final audit yourself, but you must leave NOTHING for it to find.
    `update`, `render`, input events and `fixed` screens connect. Never invent
    a method. The template is the contract.
 2. Read `GAMEDESIGN.md` (produced in PHASE 1). Every line of code must map to
-   something designed. If code does not exist for a design line, that is a bug
+   something designed. **The core action IS the user's concept — implement it
+   verbatim, exactly as written. Never change the mechanic, never swap it for
+   another gameplay.** If code does not exist for a design line, that is a bug
    you are about to ship — fix it now.
 3. `ls`/glob the real asset folders. NEVER reference a file that is not on
    disk (golden rule #8). The code↔assets cross-check below is mandatory.
@@ -55,6 +57,13 @@ do not do the final audit yourself, but you must leave NOTHING for it to find.
 - **No leaks.** Every listener created is stored and removed; every interval
   is cleared; every object pool capped. Pause/resume 10× must not multiply
   entities or memory.
+- **PAUSE must never break.** After EVERY code change, click the pause button:
+  the game freezes instantly, the pause screen opens, resume restores the run,
+  no console error. A dead pause button is a ship-blocking bug — fix it before
+  anything else.
+- **Shop is visual.** Every shop item renders its ILLUSTRATION asset (image) +
+  a short label and price — never text-only, never overlapping. Layout the
+  items in a clean grid that fits every screen size.
 - **Edge cases as first-class work.** Level 1, last level, 0 coins, buy with
   exact coins, revive with 0 coins, the instant a level is won while a
   particle spawns, double-tap on buttons, resize mid-run. Each one is a test
@@ -148,7 +157,9 @@ level fully playable in each cell. Any failing cell = not done.
 2. PLAY a full level, then screenshot and LOOK with vision (or the mechanical
    fallback from the orchestrator's golden rules if the model cannot read
    images). Never approve from code alone.
-3. Visit EVERY screen: menu, gameplay, pause, gameover, victory, shop.
+3. Visit EVERY screen: menu, gameplay, pause, gameover, victory, shop. Click
+   PAUSE in gameplay: it freezes, then resume works. Check the shop: each item
+   shows its illustration image + label, nothing overlaps.
 4. Stress it: win, lose, revive, double coins, resize mid-run, pause/resume.
 5. Console must show zero errors the whole session — screenshot the console.
 
@@ -157,8 +168,10 @@ level fully playable in each cell. Any failing cell = not done.
 ## Hand-off
 
 **Gate D — DONE means:** game plays start to finish (level 1 → victory →
-level 2), numeric ramp, every gameplay asset real and used, sounds on every
-action, zero MISSING files, console clean, full responsive matrix green,
-every screen seen with vision. Report to the orchestrator: what was
-implemented, which storage keys are live, and what P5 (SDK/ads) must re-check.
-**Do NOT proceed to the SDK — that is the orchestrator's PHASE 5.**
+level 2), the mechanic is the USER's concept verbatim, numeric ramp, every
+gameplay asset real and used, sounds on every action, zero MISSING files,
+console clean, PAUSE works everywhere, shop items illustrated without overlap,
+full responsive matrix green, every screen seen with vision. Report to the
+orchestrator: what was implemented, which storage keys are live, and what P5
+(SDK/ads) must re-check. **Do NOT proceed to the SDK — that is the
+orchestrator's PHASE 5.**
