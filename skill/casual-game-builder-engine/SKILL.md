@@ -184,6 +184,16 @@ FAILS. Implement the JUICE + DENSITY contract from `GAMEDESIGN.md`:
 - **DENSE environment**: layered background with parallax, 5+ ambient decor
   elements, at least one animated ambient element, floor/ground detail,
   screen shake/flash on key moments. The scene must look FULL, never empty.
+- **DOPAMINE in the code — build the designed hooks**:
+  - **Reward cadence**: a small reward (sound + particles + popup) fires every
+    few seconds per design; big surprise rewards pop on rare occasions.
+  - **Combo/streak**: chained actions raise a visible multiplier with
+    escalating juice (pitch-up sounds, bigger bursts); breaking it is felt.
+  - **Near-miss**: the almost-death/almost-win moment gets slow-mo / shake /
+    zoom + a "so close!" cue — engineered, not accidental.
+  - **Milestones**: popups/progress on every short goal per design.
+  - **One-more-round**: gameover lands on an animated, juicy screen whose only
+    pull is "play again NOW" (REPLAY visible).
 - **Economy**: coins earned every run (even failed), `storage.set('coins', …)`
   on earn AND spend, spend/double per design. Shop thresholds match
   `GAMEDESIGN.md` exactly.

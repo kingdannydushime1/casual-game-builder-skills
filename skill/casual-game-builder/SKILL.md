@@ -82,6 +82,12 @@ does it run clean, responsive and without errors? will Playgama accept it?
     a FEW focused iterations, enrich where it matters, ship. Do NOT generate
     pools of concepts to evaluate, do NOT spend a whole day designing, do NOT
     over-engineer. A human dev ships a fun, complete game in a few passes.
+15. **DESIGN FOR DOPAMINE.** The game runs on player psychology, engineered
+    on purpose: instant feedback on every action, a reward every few seconds,
+    variable (surprise) rewards, near-miss tension ("so close!"), streaks and
+    combos that build a multiplier, frequent milestones, and a losing moment
+    that makes the player want to retry NOW. Reward cadence is a designed
+    number, never an accident.
 
 ---
 
@@ -300,8 +306,19 @@ NOT done. Re-run a gate whenever anything it covers changes.
      (+X% speed per level, +Y spawn density, new obstacle every N levels),
      star thresholds.
    - DEPTH package with exact numbers: combo/multiplier, 2+ power-ups,
-     escalating difficulty, coins + meta, milestones, best-score chase,
-     near-miss, juice on every action.
+      escalating difficulty, coins + meta, milestones, best-score chase,
+      near-miss, juice on every action.
+   - **DOPAMINE + PLAYER MENTALITY (engineered, with numbers):**
+     - **Reward cadence**: a small reward every 2-5 seconds, plus an occasional
+       BIG variable (surprise) reward. Never long dry spells.
+     - **Near-miss**: a designed "so close!" moment (almost died, almost won,
+       almost got the item) that makes the player retry instantly.
+     - **Streak/combo**: chained actions build a multiplier, visibly paid and
+       celebrated; breaking a streak is felt.
+     - **Milestones**: frequent short goals (progress bar, unlocks, stars)
+       feeding constant progress.
+     - **One-more-round**: the losing moment leaves the player wanting to play
+       again NOW — that pull is part of the design, not an accident.
    - Full scoring rules; full state machine; interaction spec (object ×
      action × result).
    - **THE COMPLETE ASSET LIST — the bridge to the asset phase.** Every asset

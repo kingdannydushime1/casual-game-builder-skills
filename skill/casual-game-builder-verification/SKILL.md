@@ -55,6 +55,17 @@ Watch it LIVE, trigger the moments:
   an animated ambient element, floor detail. Almost-empty environment = FAIL.
 - Every action has visible AND audible feedback.
 
+### 3c. Dopamine — play it and FEEL it
+Play several runs and verify the designed psychology works:
+- **Reward cadence**: a reward (sound + particles + popup) every few seconds —
+  long dry spells = FAIL.
+- **Combo/streak**: chaining actions visibly raises a multiplier with
+  escalating juice. No combo payoff = FAIL.
+- **Near-miss**: an "almost!" moment exists and creates tension.
+- **Milestones**: frequent short goals give constant progress.
+- **One-more-round**: after a loss you want to retry NOW — if dying feels flat
+  and the player doesn't care, FAIL.
+
 ### 4. Pause and controls
 - Click PAUSE in gameplay: freezes instantly, pause screen opens, resume
   restores the run, no error. Dead pause = FAIL.
@@ -81,6 +92,7 @@ Watch it LIVE, trigger the moments:
 **Gate F / DELIVERY GATE — DONE only when every box above is PASS with proof.**
 Game played start-to-finish, seen on every screen; concept verbatim; juice seen
 live (music, particles, confetti, animated end screens, dense environment);
+**dopamine felt live (reward cadence, combo juice, near-miss, one-more-round)**;
 SDK/ads policy proven live; console clean; responsive; no overlap; no bad
 backgrounds; committed and pushed to its own repo; runnable by opening the
 folder. Report to the orchestrator: PASS/FAIL per box, what was mechanically
