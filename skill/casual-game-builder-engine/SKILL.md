@@ -161,13 +161,25 @@ elements get placed by eyeballed coordinates instead of a layout system.
 
 ---
 
-## Effects, sound, economy (asset-only, always)
+## Effects, sound, juice, density (asset-only, always)
 
-- **Sounds**: real files (ogg/mp3) from the SFX module wired to collect,
-  combo, milestone, victory, defeat, click. `audio.tone()` is ONLY the generic
-  UI-click fallback — never the designed game audio.
-- **Effects**: sprite-based particles, asset popup images, CSS shake/flash.
-  Every action has feedback. Cap particles for 60fps on weak phones.
+The game must SEDUCE the player on every frame. A quiet, static or empty game
+FAILS. Implement the JUICE + DENSITY contract from `GAMEDESIGN.md`:
+
+- **Music**: a real looping music track starts with the game (and a mute
+  toggle), plus SFX on every action — collect, combo, milestone, victory,
+  defeat, click. `audio.tone()` is ONLY the generic UI-click fallback — never
+  the designed game audio.
+- **Particles + confetti**: a burst on collect/level-up, a big confetti rain
+  on victory, particles on the gameover screen. All sprite-based, capped for
+  60fps on weak phones.
+- **Animated end screens**: GAMEOVER and VICTORY are ANIMATED — entrance
+  animation, moving title, particles, confetti — never a static layout.
+- **Feedback on EVERY action**: something visible AND audible every time the
+  player does anything.
+- **DENSE environment**: layered background with parallax, 5+ ambient decor
+  elements, at least one animated ambient element, floor/ground detail,
+  screen shake/flash on key moments. The scene must look FULL, never empty.
 - **Economy**: coins earned every run (even failed), `storage.set('coins', …)`
   on earn AND spend, spend/double per design. Shop thresholds match
   `GAMEDESIGN.md` exactly.
@@ -184,7 +196,11 @@ elements get placed by eyeballed coordinates instead of a layout system.
    PAUSE in gameplay: it freezes, then resume works. Check the shop: each item
    shows its illustration image + label, nothing overlaps.
 4. Stress it: win, lose, revive, double coins, resize mid-run, pause/resume.
-5. Console must show zero errors the whole session — screenshot the console.
+5. **Watch the juice live**: trigger a collect (particles + sound), win a level
+   (confetti rain + animated victory), die (animated gameover), open the menu
+   (music playing, ambient elements moving). If any screen is static, silent or
+   empty, it is NOT done.
+6. Console must show zero errors the whole session — screenshot the console.
 
 ---
 
@@ -192,9 +208,11 @@ elements get placed by eyeballed coordinates instead of a layout system.
 
 **Gate D — DONE means:** game plays start to finish (level 1 → victory →
 level 2), the mechanic is the USER's concept verbatim, numeric ramp, every
-gameplay asset real and used, sounds on every action, zero MISSING files,
-console clean, PAUSE works everywhere, shop items illustrated without overlap,
-full responsive matrix green, every screen seen with vision. Report to the
-orchestrator: what was implemented, which storage keys are live, and what P5
+gameplay asset real and used, sounds on every action, **juice present and seen
+(music, particles/confetti, animated gameover/victory, dense environment)**,
+zero MISSING files, console clean, PAUSE works everywhere, shop items
+illustrated without overlap, full responsive matrix green, every screen seen
+with vision. Report to the orchestrator: what was implemented, which storage
+keys are live, and what P5
 (SDK/ads) must re-check. **Do NOT proceed to the SDK — that is the
 orchestrator's PHASE 5.**

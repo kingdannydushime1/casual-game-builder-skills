@@ -44,6 +44,17 @@ Screenshot and LOOK at menu, gameplay, pause, gameover, victory, shop:
 - Dense and aligned (no empty zones), readable HUD, REPLAY visible.
 - Shop items show their **illustration image + label** — text-only = FAIL.
 
+### 3b. The juice — what seduces the player
+Watch it LIVE, trigger the moments:
+- **Music** plays (loop) + a mute toggle works. Silent game = FAIL.
+- **Particles**: a burst fires on collect / level-up. None = FAIL.
+- **Confetti rain** on victory; particles on gameover. Static end screens =
+  FAIL.
+- **GAMEOVER / VICTORY are ANIMATED** (entrance, moving title) — not static.
+- **Environment is DENSE**: layered background, 5+ ambient decor elements,
+  an animated ambient element, floor detail. Almost-empty environment = FAIL.
+- Every action has visible AND audible feedback.
+
 ### 4. Pause and controls
 - Click PAUSE in gameplay: freezes instantly, pause screen opens, resume
   restores the run, no error. Dead pause = FAIL.
@@ -68,8 +79,10 @@ Screenshot and LOOK at menu, gameplay, pause, gameover, victory, shop:
 ## Hand-off
 
 **Gate F / DELIVERY GATE — DONE only when every box above is PASS with proof.**
-Game played start-to-finish, seen on every screen; concept verbatim; SDK/ads
-policy proven live; console clean; responsive; no overlap; no bad backgrounds;
-committed and pushed to its own repo; runnable by opening the folder. Report
-to the orchestrator: PASS/FAIL per box, what was mechanically verified, and
-the final "deliver now" verdict — or the list of FAILs being fixed.
+Game played start-to-finish, seen on every screen; concept verbatim; juice seen
+live (music, particles, confetti, animated end screens, dense environment);
+SDK/ads policy proven live; console clean; responsive; no overlap; no bad
+backgrounds; committed and pushed to its own repo; runnable by opening the
+folder. Report to the orchestrator: PASS/FAIL per box, what was mechanically
+verified, and the final "deliver now" verdict — or the list of FAILs being
+fixed.

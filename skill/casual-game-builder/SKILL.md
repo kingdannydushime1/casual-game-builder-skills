@@ -294,8 +294,24 @@ NOT done. Re-run a gate whenever anything it covers changes.
      2+ power-ups, HUD icons, popups, particles/confetti, ALL sounds, music,
      fonts, favicon. **The SHOP is visual too**: every shop item gets its own
      illustration asset (an image of the item) — the shop is images + a short
-     label, NEVER text-only. If the list is thin, the game is thin — expand
-     the design.
+      label, NEVER text-only. If the list is thin, the game is thin — expand
+      the design.
+   - **THE JUICE + DENSITY CONTRACT (mandatory — this is what seduces the
+     player).** A game that is quiet, empty or static FAILS. The design MUST
+     include, with exact assets listed:
+     - **Music**: a real looping music track + SFX on every action (collect,
+       combo, milestone, win, lose, click). A game without music = fail.
+     - **Particles + confetti**: burst effects on collect/win/level-up, a big
+       confetti rain on victory — listed as assets.
+     - **Animated end screens**: GAMEOVER and VICTORY screens are ANIMATED
+       (entrance animation, particles, moving title) — never a static layout.
+     - **Feedback on EVERY action**: something visible AND audible every time
+       the player does anything.
+     - **DENSE environment**: layered background + parallax, 5+ ambient decor
+       elements, animated ambient element(s), floor/ground detail, screen
+       shake/flash on key moments. "Almost empty" environment = fail.
+     - Write each of these as a numbered requirement the code and assets must
+       satisfy — they are not optional.
 4. **One quick reality check** — play a short imaginary session in your head:
    first contact, a full run, a failure. Fix whatever feels weak in the
    document, then move on. No scoring passes, no extra iterations.
@@ -303,7 +319,9 @@ NOT done. Re-run a gate whenever anything it covers changes.
 **Gate A** — concept fixed: user-given concepts kept EXACTLY as their mechanic
 (never replaced), invented concepts ultra-simple hypercasual, cartoon-only,
 full GAMEDESIGN.md written, ALL levels numeric, complete asset list covering
-every screen including shop item illustrations. One unchecked box = rewrite.
+every screen including shop item illustrations, **and the JUICE + DENSITY
+contract filled (music, particles/confetti, animated gameover/victory, dense
+environment).** One unchecked box = rewrite.
 
 ---
 
