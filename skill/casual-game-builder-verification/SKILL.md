@@ -30,8 +30,8 @@ run passes every box.**
   rule = one row. Mark IMPLEMENTED or MISSING. **MISSING = FAIL.**
 - Re-run the code↔assets cross-check (zero MISSING, zero orphans):
   ```bash
-  rg -o '"assets/[^"]+"' src/ | tr -d '"' | sort -u | while read f; do
-    test -f "$f" || echo "MISSING: $f"; done
+  rg -o '"public/assets/[^"]+"|"assets/[^"]+"' src/ index.html | tr -d '"' | sort -u \
+    | while read f; do test -f "$f" || echo "MISSING: $f"; done
   ```
 - Grep for `TODO`, `FIXME`, `console.log`, `debugger`, stubs, commented blocks.
   Any hit = FAIL.
@@ -76,6 +76,8 @@ Play several runs and verify the designed psychology works:
 - Responsive matrix: portrait AND landscape × phone/tablet/desktop/big —
   nothing cut off, buttons tappable, HUD intact. Failing cell = FAIL.
 - Runs WITH and WITHOUT the SDK.
+- **Production build works**: `npm run build` then `npm run preview` — the
+  built game runs clean, same as dev.
 
 ### 6. SDK + ads, live
 - Interstitial after **2 consecutive wins** and after **2 consecutive losses**.
@@ -94,7 +96,7 @@ Game played start-to-finish, seen on every screen; concept verbatim; juice seen
 live (music, particles, confetti, animated end screens, dense environment);
 **dopamine felt live (reward cadence, combo juice, near-miss, one-more-round)**;
 SDK/ads policy proven live; console clean; responsive; no overlap; no bad
-backgrounds; committed and pushed to its own repo; runnable by opening the
-folder. Report to the orchestrator: PASS/FAIL per box, what was mechanically
+backgrounds; committed and pushed to its own repo; production build verified.
+Report to the orchestrator: PASS/FAIL per box, what was mechanically
 verified, and the final "deliver now" verdict — or the list of FAILs being
 fixed.

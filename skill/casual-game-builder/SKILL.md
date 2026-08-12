@@ -1,6 +1,6 @@
 ---
 name: casual-game-builder
-description: Build a COMPLETE, beautiful hypercasual game for Playgama as a full expert production team. Use when the user asks to build a new hypercasual or casual web game for Playgama (or from a one-line game idea). The agent invents an ultra-simple fun concept alone, designs the full gameplay with the COMPLETE asset list, hunts and VISION-verifies real assets (zero procedural art, zero AI look), installs the hypercasual-game-template repo, implements multiple levels, integrates the Playgama Bridge SDK (interstitials every 2 consecutive wins/losses; rewarded for revive, bonus and at least 50% of shop items), then verifies everything by running and looking.
+description: Build a COMPLETE, beautiful hypercasual game for Playgama as a full expert production team. Use when the user asks to build a new hypercasual or casual web game for Playgama (or from a one-line game idea). The agent keeps the user's concept verbatim (or invents one ultra-simple hook), designs a RICH complete multi-level game with the COMPLETE asset list (juice, dopamine, density), hunts real assets (itch.io majority, zero procedural art), builds it in Phaser 3, integrates the Playgama Bridge SDK (interstitials after 2 consecutive wins/losses; rewarded for revive, bonus and at least 50% of shop items), then verifies everything by running and looking.
 ---
 
 # Casual Game Builder for Playgama
@@ -71,9 +71,10 @@ does it run clean, responsive and without errors? will Playgama accept it?
     delivery or for a hard blocker.
 11. **RUN BEFORE CLAIM.** Nothing is done until the game is launched, played
     and seen (screenshot + vision).
-12. **TEMPLATE-BASED.** Build by installing the template repo and customizing
-    only its customizable zones. Never rebuild the shell; never modify the
-    fixed core/generic screens; all custom code lives in the gameplay hook.
+12. **ENGINE-BASED.** The game is built on the **Phaser 3** engine scaffold
+    (THE ENGINE section). Never write a game from scratch on raw canvas, never
+    rebuild the engine, never touch any repo other than the game's own. All
+    custom code lives in the Phaser scenes under `src/`.
 13. **HYPERCASUAL = SIMPLE HOOK, NOT A THIN PROTOTYPE.** Like Voodoo hits: ONE
     simple mechanic at the core, then ENRICH it — polished controls, depth,
     meta, juice — into a full hit. "Simple concept" never means "bare
@@ -88,31 +89,36 @@ does it run clean, responsive and without errors? will Playgama accept it?
     combos that build a multiplier, frequent milestones, and a losing moment
     that makes the player want to retry NOW. Reward cadence is a designed
     number, never an accident.
+16. **NEVER TOUCH OTHER REPOS.** The game lives in its OWN repo, named after
+    the game. You never modify, push to, delete or rename any other repository
+    — the skill repos, the template repo, or anyone else's. If a repo is
+    missing or broken, create the game's own repo and move on; never
+    "repair" another repo.
 
 ---
 
-## HOW THIS SKILL SET IS CONNECTED (3 skills, 3 files)
+## HOW THIS SKILL SET IS CONNECTED (4 skills, 4 files)
 
-This orchestrator is ONE skill of a THREE-skill set. Each skill lives in its
+This orchestrator is ONE skill of a FOUR-skill set. Each skill lives in its
 own folder/file and is loaded at the right moment with the skill tool — never
 copied into this file:
 
 | Skill | Folder | When it is loaded | What it owns |
 |---|---|---|---|
-| **casual-game-builder** (this one) | `skill/casual-game-builder/` | from the start | The whole production: design (P1), assets (P2), template install/config (P3), and it ORCHESTRATES the other three |
-| **casual-game-builder-engine** | `skill/casual-game-builder-engine/` | at **PHASE 4** | Writes the game code: zero errors, responsive, no overlapping UI, multi-level, real-asset canvas |
+| **casual-game-builder** (this one) | `skill/casual-game-builder/` | from the start | The whole production: design (P1), assets (P2), project setup (P3), and it ORCHESTRATES the other three |
+| **casual-game-builder-engine** | `skill/casual-game-builder-engine/` | at **PHASE 4** | Writes the game code in Phaser 3: zero errors, responsive, juicy, no overlapping UI, multi-level |
 | **casual-game-builder-sdk** | `skill/casual-game-builder-sdk/` | at **PHASE 5** | Integrates the Playgama SDK + ads: game_ready, interstitials after 2 consecutive same-outcome runs, rewarded for revive/double-coins/≥50% shop, moderation checklist |
-| **casual-game-builder-verification** | `skill/casual-game-builder-verification/` | at **PHASE 6** | Runs the hard evidence checklist: concept verbatim, everything implemented, screens good with zero overlap, SDK live, pause works — blocks delivery on any FAIL |
+| **casual-game-builder-verification** | `skill/casual-game-builder-verification/` | at **PHASE 6** | Runs the hard evidence checklist: concept verbatim, everything implemented, screens good with zero overlap, juice + dopamine felt, SDK live, pause works — blocks delivery on any FAIL |
 
 The connection contract:
 
 1. **Load, never paste.** This skill LOADS the others with the skill tool at
    their phases. Each skill is self-contained but references the shared
    contract below — that is how they stay in sync without being one file.
-2. **Shared contract (all four read it from THIS file):** the game is built
-   on the `hypercasual-game-template` repo, the exact hook API in
-   `src/screens/gameplay-screen.js`, `config/config.js`, `storage`,
-   `sdk`, `audio`, `fx` and the `GAMEDESIGN.md` document produced in P1.
+2. **Shared contract (all four read it from THIS file):** the game is a
+   **Phaser 3** project (scaffold, scenes, config and structure in THE ENGINE
+   section), assets live in `public/assets/`, state persists via `storage.js`,
+   SDK via `sdk.js`, plus the `GAMEDESIGN.md` document produced in P1.
 3. **Hand-off order:** engine finishes → hands to orchestrator at **Gate D** →
    SDK skill (P5) → **Gate E** → hands to verification (P6) →
    verification reports back at **Gate F**. Each hand-off names what the next
@@ -123,146 +129,117 @@ The connection contract:
 
 ---
 
-## THE TEMPLATE — install, customize, never break
+## THE ENGINE — Phaser 3 for 2D (never a bare canvas, never a home-made template)
 
-The game is built on the **hypercasual-game-template** repo:
+The game is built with **Phaser 3** — a real, documented game engine — NOT a
+custom template, NOT raw canvas. Phaser provides physics, particles, tweens,
+cameras, audio and scene management out of the box, which is exactly what
+makes the game juicy, responsive and bug-free.
 
-```
-https://github.com/kingdannydushime1/hypercasual-game-template
-```
+- **2D games → Phaser 3.** (If a design genuinely needs 3D / 2.5D, use a 3D
+  engine instead — but the default for hypercasual is 2D Phaser.)
+- **NEVER hallucinate the Phaser API.** Check the installed Phaser version's
+  docs before using a method. `Phaser.VERSION` prints the version.
+- **NEVER touch any repo except the game's own.** You never modify, push to or
+  delete the skill repos, the template repo or any other repository. The game
+  lives in its OWN fresh repo named after the game.
 
-### 1. Install
-
-Clone or copy the repo into the game folder and remove the `.git` directory
-(your game gets its OWN fresh git repo):
+### 1. Scaffold (Vite + Phaser 3)
 
 ```bash
-git clone https://github.com/kingdannydushime1/hypercasual-game-template.git game
-cd game && rm -rf .git && git init -b main && git add -A
-git -c user.name="you" -c user.email="you@users.noreply.github.com" commit -m "Init from hypercasual-game-template"
+npm create vite@latest game -- --template vanilla
+cd game && npm i phaser
 ```
 
-### 2. Structure (what is what)
+`index.html` mounts a `<div id="game">`. `src/main.js` creates the Phaser
+config. Game code lives in `src/` (scenes), assets in `public/assets/`.
+
+### 2. Structure (what goes where)
 
 ```
 game/
-├── index.html            → script order. May ADD <script> tags (sdk.js, sfx.js,
-│                           sprites data...), never remove/reorder existing ones.
-├── game-config.js        → ★ THE customizable config (see below)
-├── assets/
-│   ├── css/screen.css    → layout only. May add new layout rules for new HUD.
-│   ├── screens/          → ★ REPLACE menu-bg.png and gameplay-bg.png (themed)
-│   ├── ui/               → ⛔ FIXED gold pack. NEVER touch (buttons, panels...)
-│   ├── sprites/          → ★ NEW: your gameplay sprites (created by the asset phase)
-│   └── audio/            → ★ NEW: your real sound files + music
+├── index.html            → the mount div + <script> for sdk.js
+├── package.json
+├── public/
+│   └── assets/
+│       ├── screens/      → backgrounds (menu, gameplay, shop...)
+│       ├── sprites/      → all gameplay sprites + FX + particle images
+│       ├── ui/           → buttons, icons, panels, shop item images
+│       └── audio/        → music + SFX (ogg + mp3)
 └── src/
-    ├── core/             → ⛔ game.js, screen-manager.js, audio.js, input.js,
-    │                        storage.js. NEVER modify. (Add sdk.js/sfx.js here.)
-    ├── ui/ui-kit.js      → ⛔ Button, Panel. NEVER modify.
-    ├── screens/          → loading, menu, pause, gameover, victory, shop =
-    │                        ⛔ generic, FIXED (button texts included).
-    │                        gameplay-screen.js = ★ THE GAMEPLAY HOOK
-    │                        (your whole game lives here).
-    └── main.js           → screen registration (loading is always first).
-                            NEVER modify.
+    ├── main.js           → Phaser.Game config (scale, scenes, physics)
+    ├── config.js         → id, title, levels, shop items, coin values
+    ├── storage.js        → save/load via localStorage (works without SDK)
+    ├── sdk.js            → Playgama wrapper (Phase 5)
+    ├── sfx.js            → sound helper wired to Phaser audio
+    └── scenes/
+        ├── Boot.js       → set up, then Loading
+        ├── Loading.js    → real progress bar, loads EVERY asset, then Menu
+        ├── Menu.js       → title, PLAY, mute toggle
+        ├── Gameplay.js   → THE game: player, obstacles, levels, juice, pause
+        ├── Pause.js      → overlay + RESUME (must always work)
+        ├── GameOver.js   → ANIMATED: entrance, particles, REVIVE + RETRY
+        ├── Victory.js    → ANIMATED: confetti, NEXT LEVEL, DOUBLE COINS
+        └── Shop.js       → items as ILLUSTRATION images + BUY / WATCH AD
 ```
 
-Legend: ★ = customizable / the agent's job. ⛔ = fixed, identical for every game.
-
-### 3. game-config.js — customize these fields only
+### 3. The Phaser config (main.js) — responsive by design
 
 ```js
-const GAME_CONFIG = {
-  id: 'my-game',                    // storage prefix (letters, dashes)
-  firstScreen: 'loading',           // the loading screen always runs first
-  playTarget: 'gameplay',           // where PLAY / RETRY / NEXT LEVEL go
-  title: 'MY GAME',                 // shown on the loading screen + menu
-  loading: {                        // ★ list EVERY image the game uses here
-    loadTarget: 'menu',             //   so the loading bar fills with real
-    assets: []                      //   progress (sprites, FX, backgrounds...)
+const config = {
+  type: Phaser.AUTO,
+  parent: 'game',
+  backgroundColor: '#000000',
+  scale: {
+    mode: Phaser.Scale.FIT,          // fits ANY screen size
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+    width: 720, height: 1280         // logical size (portrait default)
   },
-  backgrounds: {                     // replace the PNG files in assets/screens/
-    menu: 'assets/screens/menu-bg.png',
-    gameplay: 'assets/screens/gameplay-bg.png'
-  },
-  features: { shop: true },         // false removes the SHOP button AND screen
-  shop: { items: [                  // name in English, price in coins,
-    { id: 'extra_heart',            // image = the item's ILLUSTRATION asset
-      name: 'Heart +1',             // (from Phase 2) — the shop shows the
-      price: 100,                   // image + label, never text only
-      image: 'assets/sprites/extra-heart.png' }
-  ]},
-  hud: { showScore: true, showHearts: true, hearts: 3 }
+  physics: { default: 'arcade', arcade: { debug: false } },
+  scene: [Boot, Loading, Menu, Gameplay, Pause, GameOver, Victory, Shop]
 };
 ```
 
-**Template icons (from the pack, do not rename):** the gameplay HUD hearts are
-`assets/ui/l1.png` (filled) / `l2.png` (empty). The Victory and Game Over
-screens show a star row — `s1.png` (filled) / `s2.png` (empty) — driven by the
-`{ stars: n }` option: call `game.show('victory', { stars: n })` or
-`game.show('gameover', { stars: n })` from the gameplay hook.
+`Phaser.Scale.FIT` + a logical size = responsive by design: nothing cut off,
+nothing overlapped, HUD intact, on portrait AND landscape, phone AND desktop.
+Set the logical size per GAMEDESIGN.md (portrait or landscape).
 
-### 4. The gameplay hook API (src/screens/gameplay-screen.js)
+### 4. Scene contract
 
-The template gives you a running screen. You implement the game inside it:
+- **Boot → Loading**: preload EVERY asset in config (real progress via
+  `this.load.on('progress', cb)`), then → Menu.
+- **Gameplay**: `init(data)` resets run state from storage (level, coins, best)
+  on EVERY visit; `create()` builds the level; `update(time, delta)` runs the
+  loop — multiply every value by delta. Victory → `storage.set('level',
+  level+1)` → show Victory. Death → show GameOver.
+- **Pause**: P button → `this.scene.pause('Gameplay')` + launch Pause overlay;
+  RESUME → resume. It must ALWAYS work, always.
+- **GameOver / Victory are ANIMATED**: entrance tweens, particles, confetti,
+  moving title. Never a static screen.
+- **Shop**: each item = ILLUSTRATION image + name + price + BUY, and WATCH AD
+  for ≥50% of items. Clean grid, zero overlap.
+- **Storage**: level, coins, best, mute persisted via `storage.js`
+  (Playgama `bridge.storage` when available — Phase 5; localStorage always).
 
-- `this.canvas` / `this.ctx` — your drawing surface. `resize()` already sets
-  `canvas.width/height` to CSS size × devicePixelRatio. In `render()`, first
-  do `ctx.setTransform(canvas.width / el.clientWidth, 0, 0,
-  canvas.height / el.clientHeight, 0, 0)` and draw in CSS pixels.
-- `loop(time)` → runs `update(delta)` + `render()` on RAF. `delta` is in
-  seconds. **Multiply every velocity/timer by delta.** Never animate per frame.
-- `update(delta)` — game logic here. `render()` — draw assets here.
-- HUD helpers: `setScore(n)` (updates the coin-score HUD),
-  `setHearts(n)` (updates the heart HUD; max = `config.hud.hearts`).
-- The pause button is already wired to `game.show('pause')`; `exit()`
-  auto-stops the RAF loop, so pause/resume comes free.
-- Transitions: `this.game.show('gameover')`, `this.game.show('victory')`,
-  `this.game.show('menu')`.
-- Persistence: `this.game.storage.get(key, fallback)` / `.set(key, value)`.
-- Mute state: `this.game.audio.settings.sound`.
-- **`build()` runs on EVERY visit to the screen** (each PLAY / RETRY / NEXT
-  LEVEL). Reset the run state there or in `enter()`. Load persistent progress
-  (current level, coins, best score) from storage.
-- **Multiple levels**: victory → `storage.set('level', level + 1)`. At
-  `build()`, read `storage.get('level', 1)` and apply that level's parameters
-  (speed, spawn density, new obstacle types, star thresholds). Level 1 must be
-  gentle, the ramp numeric and readable.
-- **Loading screen**: the loading screen preloads every image you list in
-  `config.loading.assets` (plus the fixed pack + backgrounds) and drives the
-  progress bar with the real percentage. List every gameplay image (sprites,
-  FX, extra backgrounds) there so the player sees true progress.
+### 5. Juice is Phaser-native — use it, that is the dopamine
 
-### 5. Real audio (never procedural beeps)
+Particles (`this.add.particles(...)`), tweens (`this.tweens.add(...)`), camera
+shake/flash (`this.cameras.main.shake(...)` / `.flash(...)`), and real audio
+(`this.sound.play(...)`, looping music). Every reward/feedback moment fires
+sound + particles + a tween. A static frame = fail.
 
-Add `src/core/sfx.js` + a `<script src="src/core/sfx.js">` tag in index.html,
-and your real files in `assets/audio/`. Keep the template's mute in sync:
+### 6. Real audio (never procedural beeps)
 
-```js
-const SFX = (function () {
-  const sounds = {
-    collect: 'assets/audio/collect.ogg',
-    win: 'assets/audio/win.ogg',
-    lose: 'assets/audio/lose.ogg'
-  };
-  const cache = {};
-  let muted = false;
-  return {
-    setMuted(value) { muted = value; },
-    load() { Object.keys(sounds).forEach((n) => { cache[n] = new Audio(sounds[n]); }); },
-    play(name) {
-      if (muted || !cache[name]) return;
-      const a = cache[name].cloneNode();
-      a.volume = 0.8;
-      a.play().catch(() => {});
-    }
-  };
-})();
-```
+Real files (ogg + mp3) in `public/assets/audio/`. Music loops; SFX on every
+action (collect, combo, milestone, victory, defeat, click). Global mute tied
+to storage.
 
-Call `SFX.setMuted(!this.game.audio.settings.sound)` when a screen starts, and
-`SFX.play('collect')` on gameplay events. **A sound must be attached to every
-reward/feedback moment** (collect, combo, milestone, victory, defeat, click).
+### 7. Never break the build
+
+`npm run dev` to develop (localhost), then `npm run build` and `npm run
+preview` to verify the production build — the delivered game is the BUILT
+version. Zero console errors; every scene visited and seen; pause works;
+responsive in the full matrix.
 
 ---
 
@@ -273,12 +250,14 @@ NOT done. Re-run a gate whenever anything it covers changes.
 
 ---
 
-### PHASE 1 — DESIGN (direct, fast, aimed at a HIT)
+### PHASE 1 — DESIGN (a complete, rich, addictive game)
 
-> Emphasis: ONE simple concept → then ENRICH it into a hit. Hypercasual is
-> NOT a bare prototype: the depth package, juice and meta below are what make
-> it a Voodoo-style hit. A few focused passes is enough — never a whole day,
-> never a pool of concepts to evaluate. Think like a human developer.
+> Emphasis: ONE simple concept → then ENRICH it into a complete HIT. **"Simple"
+> describes ONLY the core hook, NEVER the game itself.** A game that looks
+> like a prototype, is ugly, empty, or lacks depth = FAIL. The delivered
+> design is a FULL game: rich, polished, juicy, multi-level, with meta —
+> like the top Voodoo hits. A few focused passes is enough — never a whole
+> day, never a pool of concepts to evaluate. Think like a human developer.
 
 1. **The concept — the USER's first, always kept exactly.**
    - If the USER provided a concept (theme, mechanic, one-line idea): the game
@@ -288,11 +267,12 @@ NOT done. Re-run a gate whenever anything it covers changes.
      simpler, simplify the PRESENTATION of the user's mechanic, never the
      mechanic itself. State the user's mechanic in GAMEDESIGN.md as-is
      (example: "mix colors to reach the target color") and design everything
-     around THAT verb.
+     around THAT verb. **Make it a HIT: depth, juice, levels, meta — not a
+     bare prototype.**
    - If NO concept was given: invent ONE simple hypercasual idea yourself.
      One verb (tap, swipe, drag, aim, balance, stack...), instantly
      understood, a bright cartoon world (NEVER photos/realism). No
-     match-3 / runner / flappy / merge clones.
+     match-3 / runner / flappy / merge clones. Then ENRICH it fully.
 2. **Hook line** — one catchy cartoon sentence ("You run a cartoon bakery
    where every cake has a face and tries to escape before the oven timer").
    If the line is flat, the idea is flat. Also describe the single most
@@ -352,10 +332,10 @@ NOT done. Re-run a gate whenever anything it covers changes.
 
 **Gate A** — concept fixed: user-given concepts kept EXACTLY as their mechanic
 (never replaced), invented concepts ultra-simple hypercasual, cartoon-only,
-full GAMEDESIGN.md written, ALL levels numeric, complete asset list covering
-every screen including shop item illustrations, **and the JUICE + DENSITY
-contract filled (music, particles/confetti, animated gameover/victory, dense
-environment).** One unchecked box = rewrite.
+**a COMPLETE rich game designed (multi-level, depth, meta, juice — never a
+bare prototype)**, full GAMEDESIGN.md written, ALL levels numeric, complete
+asset list covering every screen including shop item illustrations, **and the
+JUICE + DENSITY + DOPAMINE contracts filled.** One unchecked box = rewrite.
 
 ---
 
@@ -367,10 +347,11 @@ environment).** One unchecked box = rewrite.
 
 1. **Build the search list from GAMEDESIGN.md** — one line per asset (type,
    theme, target size). This IS the hunt checklist.
-2. **Hunt with the exact theme words** — itch.io first
-   (`itch.io game assets <theme> <type>`, `site:itch.io <theme> <type>`),
-   then Kenney.nl, OpenGameArt, Game-icons.net (icons), Google Fonts
-   (self-hosted), CraftPix freebies, then keyword web search
+2. **Hunt — itch.io FIRST and MAJORITY.** At least half of all assets MUST come
+   from itch.io (`itch.io game assets <theme> <type>`, `site:itch.io <theme>
+   <type>`); itch.io is full of exactly the cartoon packs this game needs.
+   Only after itch.io: Kenney.nl, OpenGameArt, Game-icons.net (icons), Google
+   Fonts (self-hosted), CraftPix freebies, then keyword web search
    (`CC0 <theme> <type> cartoon png`). Skip login/captcha walls instantly.
    NEVER search photo/realistic terms.
 3. **License** — CC0 or CC-BY (credit in CREDITS.md). Unknown = discard.
@@ -398,26 +379,29 @@ CREDITS.md. Zero missing, zero mismatch, zero photorealistic.
 
 ---
 
-### PHASE 3 — INSTALL THE TEMPLATE & CONFIGURE
+### PHASE 3 — SET UP THE PROJECT (Phaser, own repo)
 
-1. Install the template (section THE TEMPLATE) into the game folder.
-2. Create the game's GitHub repo FIRST — **named after the game**, in its own
-   repo (never inside the skill or template repos): check no duplicate
-   (`gh repo view <owner>/<game-name>`), then
+1. Scaffold the Phaser project in the game folder (section THE ENGINE):
+   `npm create vite@latest game -- --template vanilla && cd game && npm i phaser`.
+2. Create the game's GitHub repo — **named after the game, in its OWN repo**.
+   Check no duplicate (`gh repo view <owner>/<game-name>`), then
    `gh repo create <game-name> --public --source=. --push`. Commit as you go.
-3. Edit `game-config.js`: id, title, features.shop, shop.items, hud — exactly
-   as designed in GAMEDESIGN.md — and list every gameplay image in
-   `loading.assets` so the loading bar fills with real progress.
-4. Replace `assets/screens/menu-bg.png` and `gameplay-bg.png` with the
-   themed backgrounds from Phase 2. **Backgrounds must be GOOD: themed, dense,
-   coherent with the palette — open and LOOK at every screen; a bad or empty
-   or mismatched background is discarded and replaced, never shipped.**
-5. Add the `<script>` tags for `src/core/sdk.js` and `src/core/sfx.js` in
-   index.html, plus the Playgama bridge script (Phase 5).
+   **NEVER touch, modify, push to or delete any other repository** (skill,
+   template, or anyone else's) — if something is missing, build the game's
+   own repo and move on.
+3. Write `src/config.js` (id, title, levels, shop items with illustration
+   images, coin values, music/SFX keys) exactly as designed in GAMEDESIGN.md.
+4. Put the themed backgrounds from Phase 2 in `public/assets/screens/`.
+   **Backgrounds must be GOOD: themed, dense, coherent with the palette —
+   open and LOOK at every screen; a bad or empty or mismatched background is
+   discarded and replaced, never shipped.**
+5. Create the scene skeleton (Boot, Loading, Menu, Gameplay, Pause, GameOver,
+   Victory, Shop) with `main.js` config — see THE ENGINE. SDK/sfx wiring comes
+   later (P4/P5).
 
-**Gate B** — config set, backgrounds swapped, game boots with zero console
-errors (`python3 -m http.server` + open, or the project's dev server), first
-commit pushed.
+**Gate B** — Phaser project scaffolds, boots with zero console errors
+(`npm run dev` + open in browser), every scene opens, first commit pushed to
+the game's own repo.
 
 ---
 
@@ -430,29 +414,29 @@ commit pushed.
 > steps below are only the hand-off summary; the engine file is the authority.
 
 1. LOAD `casual-game-builder-engine` and apply it top to bottom.
-2. Implement the whole game in `src/screens/gameplay-screen.js` using the hook
-   API. Delta-time logic. Every visual is an asset image drawn to the canvas
-   (or HUD element); zero primitive-drawn art.
-3. **Multiple levels** exactly as designed: `storage.get('level', 1)` at
-   `build()`, per-level parameters applied, `storage.set('level', level+1)`
-   on victory. Numeric difficulty ramp, new obstacles/patterns over levels.
-4. Wire **real sounds** (SFX module) to every action: collect, combo,
-   milestone, victory, defeat, click.
-5. Wire **effects**: particles, popups, shake/flash — all asset-based
-   (sprite particles, asset popup images, CSS shake). Per-action feedback.
+2. Implement the whole game as Phaser 3 scenes (Gameplay first, then Pause,
+   GameOver, Victory, Shop) following THE ENGINE structure. Every visual is an
+   asset image (texture) — zero primitive-drawn art, zero placeholder shapes.
+3. **Multiple levels** exactly as designed: read `storage.get('level', 1)` on
+   every run start, apply per-level parameters, `storage.set('level', level+1)`
+   on real victory. Numeric difficulty ramp, new obstacles/patterns per level.
+4. Wire **real sounds** to every action: collect, combo, milestone, victory,
+   defeat, click.
+5. Wire **effects**: Phaser particles, tweens, camera shake/flash — per-action
+   feedback, plus the juice + dopamine hooks from the engine skill.
 6. Wire coin economy + shop: coins earned every run (even failed), spent or
    doubled per design. `storage.set('coins', ...)`.
-7. Keep the fixed screens' contract: gameover REVIVE restores the run where it
-   ended; victory advances the level. Your gameplay must expose what those
-   screens need (state read from storage at build).
+7. Screen contracts: GameOver REVIVE restores the run where it ended; Victory
+   advances the level; Pause always works; GameOver/Victory are ANIMATED.
 8. **Responsive, zero-error, zero missing paths — full matrix tested** (this
    is the engine skill's core promise, verify each box in the engine file).
    **PAUSE always works** (button clickable, freezes the game, resumes) — it
    must never break after a code change. **Shop items show their illustration
    image + label** — no text-only items, no overlapping elements.
-9. **RUN BEFORE CLAIM**: launch, PLAY a full level, screenshot the screen,
-   LOOK at it with vision. Every screen (menu, gameplay, pause, gameover,
-   victory, shop if enabled) built and seen before continuing.
+9. **RUN BEFORE CLAIM**: `npm run dev`, PLAY a full level, screenshot the
+   screen, LOOK at it with vision. Every scene (menu, gameplay, pause,
+   gameover, victory, shop) built and seen before continuing. Then `npm run
+   build` + `npm run preview` to verify the production build.
 
 **Gate D** — game plays start to finish (level 1 → victory → level 2),
 multiple levels with a numeric ramp, every gameplay asset real and used,
@@ -508,9 +492,11 @@ reports its findings back here before the final delivery message.
 
 ## DELIVERABLE
 
-- The game is a folder you can click and run (`index.html` + assets), living
-  in **its own GitHub repo NAMED AFTER THE GAME** (never inside the skill or
-  template repos), committed as you go and pushed when finished.
+- The game is a Phaser project you can build and run (`npm install` →
+  `npm run build` → open `dist/index.html`, or `npm run dev`), living in **its
+  own GitHub repo NAMED AFTER THE GAME**, committed as you go and pushed when
+  finished. **The delivered build is the `npm run build` output** (for
+  Playgama: ZIP it with `index.html` at root).
 - Final delivery message includes: the repo URL, how to run it, what was built
   (concept, levels, depth, assets, SDK/ads), a Playgama submission note (ZIP,
   title, metadata, partner-readiness), and a list of anything that was only

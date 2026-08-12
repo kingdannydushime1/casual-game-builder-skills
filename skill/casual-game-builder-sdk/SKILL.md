@@ -76,7 +76,7 @@ flow through correctly.
 - Apply `bridge.platform.isAudioEnabled` at start.
 - Send `game_ready` when the first playable frame is ready.
 - Persist progress via `bridge.storage` when available (fall back to
-  localStorage — the template's `Storage` still works without SDK).
+  localStorage — the game's `storage.js` still works without SDK).
 - Every `sdk.*` call is defensive: it can never crash the game if the bridge
   is absent or fails (the wrapper above already guarantees that).
 
