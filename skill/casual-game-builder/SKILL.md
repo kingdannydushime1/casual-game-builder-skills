@@ -12,14 +12,34 @@ does it run clean, responsive and without errors? will Playgama accept it?
 
 ---
 
+## HARD CONTRACT — read it ALOUD before you start, and again before you finish
+
+1. **THE USER'S CONCEPT IS THE GAME.** If the user gave a concept, the PLAYED
+   game is exactly that mechanic. Never replaced, never swapped, never
+   "simplified into an easier hypercasual". If the user's mechanic is not
+   hypercasual enough, YOU make the user's mechanic work — you never trade it
+   for another gameplay.
+2. **EVERY SCREEN is themed, dense, coherent, with ZERO overlapping elements.**
+   Backgrounds are real themed assets, never placeholders, never bad ones.
+3. **SDK + ADS exactly as P5**: interstitials after 2 consecutive same-outcome
+   runs; rewarded for revive, double coins and ≥50% of shop items.
+4. **PAUSE always works. Console always clean. Responsive on every screen
+   size.**
+5. **NOTHING is delivered until the verification skill's checklist is passed.
+   It is the last defense — if it fails the game, you FIX it, you do not skip
+   it.**
+
+---
+
 ## Golden rules (NEVER violate)
 
 1. **THE USER'S CONCEPT IS SACRED.** If the user gave a concept, the game IS
    that concept — the SAME mechanic, the SAME goal, no substitutions, no
-   "improved" variant. Example: user says "mix colors to reach the target
-   color" → the player MIXES COLORS TO REACH THE TARGET COLOR. That is the
-   core action. You may only add levels, depth and polish around it, NEVER
-   replace it with a different gameplay.
+   "improved" variant, **never replaced just to make it "easier hypercasual"**.
+   Example: user says "mix colors to reach the target color" → the player MIXES
+   COLORS TO REACH THE TARGET COLOR. That is the core action. You may only add
+   levels, depth and polish around it, NEVER replace it with a different
+   gameplay.
 2. **ZERO procedural graphics.** Never draw shapes (rectangles, circles,
    gradients, paths) with code as the art. Never generate images with AI.
    Every visual is a REAL downloaded asset. The canvas draws ASSET IMAGES.
@@ -239,10 +259,12 @@ NOT done. Re-run a gate whenever anything it covers changes.
 1. **The concept — the USER's first, always kept exactly.**
    - If the USER provided a concept (theme, mechanic, one-line idea): the game
      uses it VERBATIM as its core action. Do not invent a different gameplay,
-     do not swap the mechanic, do not "improve" it into something else. You may
-     only make it simpler to explain and add depth around it. State the user's
-     mechanic in GAMEDESIGN.md as-is (example: "mix colors to reach the target
-     color") and design everything around THAT verb.
+     do not swap the mechanic, do not "improve" it into something else, and
+     **NEVER replace it to make it "easier hypercasual"** — if it must be
+     simpler, simplify the PRESENTATION of the user's mechanic, never the
+     mechanic itself. State the user's mechanic in GAMEDESIGN.md as-is
+     (example: "mix colors to reach the target color") and design everything
+     around THAT verb.
    - If NO concept was given: invent ONE simple hypercasual idea yourself.
      One verb (tap, swipe, drag, aim, balance, stack...), instantly
      understood, a bright cartoon world (NEVER photos/realism). No
@@ -334,7 +356,9 @@ CREDITS.md. Zero missing, zero mismatch, zero photorealistic.
    as designed in GAMEDESIGN.md — and list every gameplay image in
    `loading.assets` so the loading bar fills with real progress.
 4. Replace `assets/screens/menu-bg.png` and `gameplay-bg.png` with the
-   themed backgrounds from Phase 2. VISION-check each screen for readability.
+   themed backgrounds from Phase 2. **Backgrounds must be GOOD: themed, dense,
+   coherent with the palette — open and LOOK at every screen; a bad or empty
+   or mismatched background is discarded and replaced, never shipped.**
 5. Add the `<script>` tags for `src/core/sdk.js` and `src/core/sfx.js` in
    index.html, plus the Playgama bridge script (Phase 5).
 

@@ -33,9 +33,9 @@ do not do the final audit yourself, but you must leave NOTHING for it to find.
    a method. The template is the contract.
 2. Read `GAMEDESIGN.md` (produced in PHASE 1). Every line of code must map to
    something designed. **The core action IS the user's concept — implement it
-   verbatim, exactly as written. Never change the mechanic, never swap it for
-   another gameplay.** If code does not exist for a design line, that is a bug
-   you are about to ship — fix it now.
+   verbatim, exactly as written. Never change the mechanic, never swap it,
+   never replace it to make it "easier hypercasual".** If code does not exist
+   for a design line, that is a bug you are about to ship — fix it now.
 3. `ls`/glob the real asset folders. NEVER reference a file that is not on
    disk (golden rule #8). The code↔assets cross-check below is mandatory.
 4. Confirm the SDK mode of this run: the game must work identically with and
