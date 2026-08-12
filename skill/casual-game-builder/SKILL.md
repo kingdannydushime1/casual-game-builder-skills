@@ -77,21 +77,22 @@ copied into this file:
 
 | Skill | Folder | When it is loaded | What it owns |
 |---|---|---|---|
-| **casual-game-builder** (this one) | `skill/casual-game-builder/` | from the start | The whole production: design (P1), assets (P2), template install/config (P3), SDK/ads (P5), and it ORCHESTRATES the other two |
-| **casual-game-builder-engine** | `skill/casual-game-builder-engine/` | at **PHASE 4** | Writes the game code: zero errors, responsive, multi-level, real-asset canvas |
-| **casual-game-builder-verification** | `skill/casual-game-builder-verification/` | at **PHASE 6** | Re-checks that EVERYTHING was implemented and every objective is reached, then the polish loop |
+| **casual-game-builder** (this one) | `skill/casual-game-builder/` | from the start | The whole production: design (P1), assets (P2), template install/config (P3), and it ORCHESTRATES the other three |
+| **casual-game-builder-engine** | `skill/casual-game-builder-engine/` | at **PHASE 4** | Writes the game code: zero errors, responsive, no overlapping UI, multi-level, real-asset canvas |
+| **casual-game-builder-sdk** | `skill/casual-game-builder-sdk/` | at **PHASE 5** | Integrates the Playgama SDK + ads: game_ready, interstitials after 2 consecutive same-outcome runs, rewarded for revive/double-coins/≥50% shop, moderation checklist |
+| **casual-game-builder-verification** | `skill/casual-game-builder-verification/` | at **PHASE 6** | Runs the hard evidence checklist: concept verbatim, everything implemented, screens good with zero overlap, SDK live, pause works — blocks delivery on any FAIL |
 
 The connection contract:
 
-1. **Load, never paste.** This skill LOADS the other two with the skill tool at
+1. **Load, never paste.** This skill LOADS the others with the skill tool at
    their phases. Each skill is self-contained but references the shared
    contract below — that is how they stay in sync without being one file.
-2. **Shared contract (all three read it from THIS file):** the game is built
+2. **Shared contract (all four read it from THIS file):** the game is built
    on the `hypercasual-game-template` repo, the exact hook API in
    `src/screens/gameplay-screen.js`, `config/config.js`, `storage`,
    `sdk`, `audio`, `fx` and the `GAMEDESIGN.md` document produced in P1.
 3. **Hand-off order:** engine finishes → hands to orchestrator at **Gate D** →
-   orchestrator does SDK (P5) → **Gate E** → hands to verification (P6) →
+   SDK skill (P5) → **Gate E** → hands to verification (P6) →
    verification reports back at **Gate F**. Each hand-off names what the next
    skill must re-check; a skill never assumes a phase it did not run.
 4. **Fixes flow back.** If verification finds a bug, it fixes simple things
@@ -410,106 +411,18 @@ a note of what was implemented and what to re-check in P5.**
 
 ---
 
-### PHASE 5 — PLAYGAMA SDK (integrated carefully — this is a hard requirement)
+### PHASE 5 — PLAYGAMA SDK (delegate to the SDK skill)
 
-> The SDK is the #1 place games break. Follow this EXACTLY. **Two ad types:
-> interstitials, and rewarded.** The game must run WITH and WITHOUT the SDK.
+> **LOAD `casual-game-builder-sdk` with the skill tool NOW and follow it for
+> the entire SDK + ads work.** The SDK skill owns the bridge script, the
+> `sdk.js` wrapper, `game_ready`, loading progress, pause/audio handlers, the
+> interstitial policy (after 2 consecutive same-outcome runs) and the rewarded
+> ads (revive, double coins, ≥50% of shop items). Its **Gate E** is this
+> phase's gate.
 
-**Install:** add BEFORE your app scripts in index.html:
-`<script src="https://bridge.playgama.com/v2/stable/playgama-bridge.js"></script>`.
-Then `src/core/sdk.js` (global wrapper, plain script):
-
-```js
-const SDK = (function () {
-  const bridgePromise = (window.bridge && window.bridge.initialize)
-    ? window.bridge.initialize().then(function () { return window.bridge; })
-    : Promise.resolve(null);
-  const call = function (fn) { return function () { return bridgePromise.then(fn); }; };
-  return {
-    available: call(function (b) { return !!b; }),
-    gameReady: call(function (b) { if (b) b.platform.sendMessage('game_ready'); }),
-    loadingProgress: call(function (b, p) { if (b) b.setGameLoadingProgress(p); }),
-    levelMessage: call(function (b, name) { if (b) b.platform.sendMessage(name); }),
-    interstitial: call(function (b) {
-      if (b && b.advertisement && b.advertisement.isInterstitialSupported) {
-        try { b.advertisement.showInterstitial(); } catch (e) {}
-      }
-    }),
-    rewarded: call(function (b) {   // resolves true ONLY on state 'rewarded'
-      if (!b || !b.advertisement || !b.advertisement.isRewardedSupported) return false;
-      return new Promise(function (resolve) {
-        var settled = false;
-        var done = function (ok) { if (!settled) { settled = true; resolve(ok); } };
-        var onState = function (state) {
-          if (state === 'rewarded') done(true);
-          else if (state === 'closed' || state === 'failed') done(false);
-        };
-        b.advertisement.on(b.EVENT_NAME.REWARDED_STATE_CHANGED, onState);
-        try { b.advertisement.showRewarded(); } catch (e) { done(false); }
-      });
-    }),
-    onPlatformPause: call(function (b, cb) {
-      try { if (b) b.platform.on(b.EVENT_NAME.PAUSE_STATE_CHANGED, cb); } catch (e) {}
-    }),
-    onAudioChanged: call(function (b, cb) {
-      try { if (b) b.platform.on(b.EVENT_NAME.AUDIO_STATE_CHANGED, cb); } catch (e) {}
-    })
-  };
-})();
-```
-
-Usage: `SDK.gameReady()`, `SDK.loadingProgress(p)` (0..1, called by the loading
-screen), `SDK.levelMessage('level_started')`, `SDK.onPlatformPause(cb)`,
-`SDK.onAudioChanged(cb)`, `SDK.interstitial()`, `SDK.rewarded()` (awaited).
-`call` forwards extra arguments to the resolved bridge handler, so callbacks
-flow through correctly.
-
-Subscribe ONCE to pause + audio events; in ONE handler pause the gameplay AND
-mute SFX (host fires them for tab switches, ad openings, system pause). Apply
-`bridge.platform.isAudioEnabled` at start. Send `game_ready` when the first
-playable frame is ready. Persist progress via `bridge.storage` when available
-(fall back to localStorage — the template's `Storage` still works without SDK).
-
-**THE 2 AD TYPES — placement policy (MANDATORY):**
-
-**A. Interstitials — after 2 CONSECUTIVE same-outcome runs.**
-- Keep a streak counter. Every FINISHED run (win OR loss) increments it; a
-  run of the opposite outcome resets it.
-- After the counter reaches **2 (two wins in a row, or two losses in a row)**,
-  show an interstitial at the next natural pause (game over / victory
-  transition). Then reset the counter.
-- NEVER mid-gameplay. NEVER right after a rewarded ad (no double ads back to
-  back). Skipped entirely when `isInterstitialSupported` is false. Max ~1
-  interstitial per 2 runs.
-
-**B. Rewarded ads — the player CHOOSES, and the reward is granted ONLY on the
-`rewarded` state (never on `closed`).**
-1. **Game Over → REVIVE.** The REVIVE button (next to RETRY, always visible)
-   opens a rewarded video. Watched to `rewarded` → the run resumes EXACTLY
-   where it ended (same score, same level, same state). **Once per run.** When
-   rewarded is unsupported, hide REVIVE — never break REPLAY.
-2. **Victory → DOUBLE COINS / BONUS.** The button opens a rewarded video.
-   Watched to `rewarded` → victory reward (coins) is doubled. Closed/failed →
-   keep the base reward, never remove it. Hidden when unsupported.
-3. **Shop → at least 50% of shop items get a "WATCH AD" option.** If the shop
-   exists, for at least half of its items a rewarded video grants the item
-   without spending coins (BUY stays available too). The button states the
-   reward ("Watch ad to get X"). Never more than one rewarded ad per finished
-   run (revive OR bonus, not both).
-
-**Moderation checklist (Playgama) — pass every box before delivery:**
-- ZIP with `index.html` at root, ≤ 300 MB; title in English.
-- Ads ONLY through the Playgama Bridge; zero third-party ads, zero external
-  network calls at runtime, zero outgoing links.
-- Rewarded = player opts in via a clear button that states (1) they will watch
-  an ad and (2) what they get; reward is a bonus, never required to continue.
-- FORBIDDEN: rewarded "+1 life" every time a life is lost. The once-per-run
-  REVIVE restore is compliant; a per-death loop is not.
-- Sound AND gameplay paused during any full-screen ad.
-- REPLAY always present and immediately reachable — an ad never blocks it.
-- Progress survives ad transitions (state preserved after returning).
-- `game_ready` sent; `level_started/paused/resumed/completed/failed` sent at
-  the right moments.
+1. LOAD `casual-game-builder-sdk` and apply it top to bottom.
+2. The game must run identically WITH and WITHOUT the SDK.
+3. Re-check Gate E boxes live before handing to P6.
 
 **Gate E** — bridge script present, initialize + game_ready + pause/audio
 handlers wired once, loading screen drives `SDK.loadingProgress`, interstitials

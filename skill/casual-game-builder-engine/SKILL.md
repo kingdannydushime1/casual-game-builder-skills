@@ -125,6 +125,29 @@ level fully playable in each cell. Any failing cell = not done.
 
 ---
 
+## LAYOUT — no overlapping elements, ever
+
+Overlapping UI is a code smell you are FORBIDDEN to produce. It happens when
+elements get placed by eyeballed coordinates instead of a layout system.
+
+- **ONE layout system.** All UI positions come from ONE function that computes
+  every element's rectangle from the current screen size (anchor, offset,
+  spacing). Never hard-code a coordinate inline where a screen element lives.
+- **Every element reserves its space.** Each element has a defined rect
+  (x, y, w, h) and a spacing margin. Two elements NEVER share a region: place
+  them relative to each other (above / below / beside with a gap), not on top
+  of each other.
+- **The high-risk spots** (check them every time): HUD (score, coins, pause
+  button), the shop grid (items must never overlap, never touch), popups over
+  the HUD, gameover/victory buttons.
+- **Overlap audit after EVERY layout change**: screenshot the screen and LOOK
+  for overlaps; then re-screenshot the same screen at another size (portrait
+  and landscape). Any overlap = fix the layout system, not the pixels.
+- **No overlap is possible** only when the layout is computed — a layout made
+  of stacked elements with fixed gaps cannot overlap at any screen size.
+
+---
+
 ## The multi-level implementation
 
 - `storage.get('level', 1)` at `build()`, per-level parameters (speed, spawn
