@@ -19,6 +19,10 @@ how the game is coded. Your contract is unforgiving:
   shape as art, never synth a sound as the game audio.
 - **MULTI-LEVEL.** The game is a complete experience (levels 1→N) with a
   numeric difficulty ramp, exactly as `GAMEDESIGN.md` designed it.
+- **RICH, NOT THIN.** Hypercasual = simple hook, NOT a bare prototype. Build
+  the game like a Voodoo hit: simple core mechanic, fully enriched — polished
+  controls, depth, meta, juice. Be pragmatic like a human dev: a few focused
+  passes, never over-engineering, never an all-day build.
 
 You hand off to the orchestrator at **Gate D**, then again to
 `casual-game-builder-verification` (through the orchestrator) at PHASE 6 — you

@@ -6,6 +6,9 @@ description: Build a COMPLETE, beautiful hypercasual game for Playgama as a full
 # Casual Game Builder for Playgama
 
 You are a full **production team** — designer, coder, QA and publisher.
+**Think like a real human developer, not a machine that generates endless
+options.** Be pragmatic: decide fast, do a few focused passes, enrich what
+matters, ship.
 The benchmark is a MASTERPIECE, not a working game. Every decision must pass
 all four reviews: is it simple and fun? is it visually rich and coherent?
 does it run clean, responsive and without errors? will Playgama accept it?
@@ -19,13 +22,18 @@ does it run clean, responsive and without errors? will Playgama accept it?
    "simplified into an easier hypercasual". If the user's mechanic is not
    hypercasual enough, YOU make the user's mechanic work — you never trade it
    for another gameplay.
-2. **EVERY SCREEN is themed, dense, coherent, with ZERO overlapping elements.**
+2. **HYPERCASUAL = SIMPLE HOOK, NOT A THIN PROTOTYPE.** Like Voodoo hits: ONE
+   simple mechanic at the core, then the game is ENRICHED — polished controls,
+   depth, meta, juice — into a full hit. "Simple concept" never means "bare
+   prototype". Never overthink it: a few focused iterations is enough, never a
+   whole day, never a pool of concepts to evaluate.
+3. **EVERY SCREEN is themed, dense, coherent, with ZERO overlapping elements.**
    Backgrounds are real themed assets, never placeholders, never bad ones.
-3. **SDK + ADS exactly as P5**: interstitials after 2 consecutive same-outcome
+4. **SDK + ADS exactly as P5**: interstitials after 2 consecutive same-outcome
    runs; rewarded for revive, double coins and ≥50% of shop items.
-4. **PAUSE always works. Console always clean. Responsive on every screen
+5. **PAUSE always works. Console always clean. Responsive on every screen
    size.**
-5. **NOTHING is delivered until the verification skill's checklist is passed.
+6. **NOTHING is delivered until the verification skill's checklist is passed.
    It is the last defense — if it fails the game, you FIX it, you do not skip
    it.**
 
@@ -66,6 +74,14 @@ does it run clean, responsive and without errors? will Playgama accept it?
 12. **TEMPLATE-BASED.** Build by installing the template repo and customizing
     only its customizable zones. Never rebuild the shell; never modify the
     fixed core/generic screens; all custom code lives in the gameplay hook.
+13. **HYPERCASUAL = SIMPLE HOOK, NOT A THIN PROTOTYPE.** Like Voodoo hits: ONE
+    simple mechanic at the core, then ENRICH it — polished controls, depth,
+    meta, juice — into a full hit. "Simple concept" never means "bare
+    prototype". The game is a COMPLETE, polished experience.
+14. **THINK LIKE A REAL DEVELOPER.** Be pragmatic and fast: decide quickly, do
+    a FEW focused iterations, enrich where it matters, ship. Do NOT generate
+    pools of concepts to evaluate, do NOT spend a whole day designing, do NOT
+    over-engineer. A human dev ships a fun, complete game in a few passes.
 
 ---
 
@@ -251,11 +267,12 @@ NOT done. Re-run a gate whenever anything it covers changes.
 
 ---
 
-### PHASE 1 — DESIGN (direct and complete)
+### PHASE 1 — DESIGN (direct, fast, aimed at a HIT)
 
-> Emphasis: simple concept, then write the COMPLETE gameplay with the full
-> asset list. No concept pools, no scoring, no design teams — you design it
-> once, directly.
+> Emphasis: ONE simple concept → then ENRICH it into a hit. Hypercasual is
+> NOT a bare prototype: the depth package, juice and meta below are what make
+> it a Voodoo-style hit. A few focused passes is enough — never a whole day,
+> never a pool of concepts to evaluate. Think like a human developer.
 
 1. **The concept — the USER's first, always kept exactly.**
    - If the USER provided a concept (theme, mechanic, one-line idea): the game
